@@ -174,7 +174,7 @@ function Dashboard() {
             <div className="container-fluid mt-4" id="table-invoice">
               <h3>OPEN INVOICES</h3>
               <div className="table table-responsive container-fluid">
-                <table className="table-hover" style={{width:"100%" }}>
+                <table className="table-hover" style={{ width: "100%" }}>
                   <thead>
                     <tr>
                       <th scope="col">invoice_id</th>

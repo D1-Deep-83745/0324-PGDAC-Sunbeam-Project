@@ -21,38 +21,38 @@ function Sidebar (){
 
 
         <ul className="sidebar-list">
+        <a href="/dashboard" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
-                   <BsGrid1X2Fill className="icon"/>Dashboard
-                </a>
+                  <BsGrid1X2Fill className="icon"/>Dashboard
             </li>
+            </a>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/Books">
                    <BsBookHalf className="icon"/>Books
                 </a>
             </li>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/Categories">
                    <BsFillGrid3X3GapFill className="icon"/>Categories
                 </a>
             </li>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/users">
                    <BsPeopleFill className="icon"/>Users
                 </a>
             </li>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/Orders">
                    <BsListCheck className="icon"/>Inventory
                 </a>
             </li>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/Reports">
                    <BsMenuButtonWideFill className="icon"/>Reports
                 </a>
             </li>
             <li className="sidebar-list-item">
-                <a href="/">
+                <a href="/settings">
                    <BsFillGearFill className="icon"/>Settings
                 </a>
             </li>

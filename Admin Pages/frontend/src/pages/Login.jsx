@@ -1,43 +1,36 @@
 import { Link } from "react-router-dom";
-
+import imageSrc from '../images/facebook_profile_image.png';
 function Login() {
   return (
-    <div class="login-dark">
-      <div className="title">
-        <p>Grantha-Vihara </p>
-        <p style={{ fontSize: "30px" }}>Admin Login</p>
-      </div>
+    <div className="login-dark">
       <form method="post">
-        <div class="illustration">
-          <div className="logocontainer">
-            
-          </div>
-          <i class="icon ion-ios-locked-outline"></i>
+      <div className="illustration ">
+          <img src={imageSrc} alt="LOGO" style={{height:"120px"}} />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label htmlFor="Employee Id">Employee ID:</label>
           <input
-            class="form-control"
+            className="form-control"
             type="email"
             name="email"
             placeholder="Employee Id"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
-            class="form-control"
+            className="form-control"
             type="password"
             name="password"
             placeholder="Password"
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <Link to={"/dashboard"}>
-            <button class="btn btn-primary btn-block">Log In</button>
+            <button className="btn btn-primary btn-block">Log In</button>
           </Link>
         </div>
-        <a href="#" class="forgot">
+        <a href="#" className="forgot">
           Forgot your email or password?
         </a>
       </form>

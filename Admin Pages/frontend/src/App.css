@@ -74,28 +74,6 @@
 .login-dark form .btn-primary:active {
   transform: translateY(1px);
 }
-.title {
-  height: 100px;
-  width: 750px;
-  padding: 40px;
-  border-radius: 4px;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  color: #887979;
-  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
-  font-family: 'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-  font-size: 48px;
-  font-weight: bolder;
-  color: #897979d2;
-  text-align: center;
-  text-transform: uppercase;
-  background-color: #1e2833;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  border-radius: 50px;
-}
 
 body{
   margin: 0;

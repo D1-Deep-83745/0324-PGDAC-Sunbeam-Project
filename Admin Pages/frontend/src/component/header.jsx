@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import {BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify}
  from 'react-icons/bs'
-function Header(){
+ import imageSrc from '../images/facebook_profile_image.png';
+
+ function Header(){
     const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
     const Opensidebar = ()=>{
         setOpenSidebarToggle(!openSidebarToggle)
@@ -14,7 +16,7 @@ function Header(){
 
                 </div>
                 <div className="header-left">
-
+                      <img src={imageSrc} alt="" style={{height:"50px"}}/>
                 </div>
                 <div className="header-right">
                     <BsFillBellFill className="icon"/>
