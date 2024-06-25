@@ -1,5 +1,6 @@
 import BookListing from "../components/Booklisting";
 import Header from "../components/Header";
+import Footer from "../components/footer";
 
 export function Category6(){
     return (
@@ -11,6 +12,7 @@ export function Category6(){
         <BookListing/>
         <BookListing/>
         <BookListing/>
+        <Footer/>
         </>
     );
 }

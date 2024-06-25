@@ -1,13 +1,13 @@
 import React from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 const books = [
-  { id: 1, title: 'Book 1', price: '$10', image: '/images/Book1.jpg'  },
-  { id: 2, title: 'Book 2', price: '$15', image: '/images/Book1.jpg'  },
-  { id: 3, title: 'Book 3', price: '$20', image: '/images/Book1.jpg' },
-  { id: 4, title: 'Book 4', price: '$25', image: '/images/Book1.jpg'  },
-  { id: 5, title: 'Book 5', price: '$30', image: '/images/Book1.jpg' },
-  { id: 6, title: 'Book 6', price: '$35', image: '/images/Book1.jpg'  },
+  { id: 1, title: 'Book Title', price: '₹300', image: '/images/book6.jpg'  },
+  { id: 2, title: 'Book Title', price: '₹150', image: '/images/book5.jpg'  },
+  { id: 3, title: 'Book Title', price: '₹200', image: '/images/book4.jpg' },
+  { id: 4, title: 'Book Title', price: '₹250', image: '/images/book5.jpg'  },
+  { id: 5, title: 'Book Title', price: '₹300', image: '/images/book4.jpg' },
+  { id: 6, title: 'Book Title', price: '₹350', image: '/images/Book1.jpg'  },
   // Add more books here if needed
 ];
 

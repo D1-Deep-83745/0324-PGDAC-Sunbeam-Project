@@ -8,7 +8,7 @@ function Footer(){
             <Row>
               <Col md={4} sm={12} className="mb-3">
                 <h5>Contact Us</h5>
-                <p>Email: info@example.com</p>
+                <p>Email: granthaverse@gmail.com</p>
                 <p>Phone: +123 456 7890</p>
                 <p>Address: 123 Main Street, City, Country</p>
               </Col>
@@ -33,7 +33,7 @@ function Footer(){
             </Row>
             <Row>
               <Col className="text-center mt-3">
-                <p className="mb-0">&copy; {new Date().getFullYear()} BookStore. All Rights Reserved.</p>
+                <p className="mb-0">&copy; {new Date().getFullYear()} Grantha-Verse. All Rights Reserved.</p>
               </Col>
             </Row>
           </Container>
