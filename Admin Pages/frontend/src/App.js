@@ -14,10 +14,10 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/Books" element={<Books/>}/>
         <Route path="/Categories" element={<Categories/>}/>
-        <Route path="/users" element={<Books/>}/>
-        <Route path="/Orders" element={<Books/>}/>
-        <Route path="/Reports" element={<Books/>}/>
-        <Route path="/settings" element={<Books/>}/>
+        {/* <Route path="/users" element={<Users/>}/>
+        <Route path="/Orders" element={<Orders/>}/>
+        <Route path="/Reports" element={<Reports/>}/>
+        <Route path="/settings" element={<Settings/>}/> */}
       </Routes>
     </div>
   );

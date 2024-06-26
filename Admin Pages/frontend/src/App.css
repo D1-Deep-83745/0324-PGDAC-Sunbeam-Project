@@ -328,6 +328,72 @@ tr:hover td {
 }
 
 
+.search-filter {
+  margin-bottom: 1em;
+}
+
+#search-bar {
+  width: 60%;
+  padding: 0.5em;
+  margin-right: 1em;
+  background-color: #f0f0f0f0; 
+  box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.35);
+}
+
+.filters select {
+  padding: 0.5em;
+  margin-right: 1em;
+  color: white;
+  background-color: #1d2634;
+  box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.35);
+}
+
+.book-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+.book-list th, .book-list td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+}
+
+
+.book-actions {
+  margin-bottom: 1em;
+}
+
+#add-book-button, #bulk-delete-button {
+  padding: 0.5em 1em;
+  margin-right: 1em;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#add-book-button:hover, #bulk-delete-button:hover {
+  background-color: #45a049;
+}
+
+.edit-button, .delete-button {
+  padding: 0.3em 0.6em;
+  margin-right: 0.3em;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #008CBA;
+  color: white;
+  border: none;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
 
 
 
