@@ -1,0 +1,10 @@
+.Home h1 {
+    font-size: 3rem; /* Default font size */
+  }
+  
+  @media (max-width: 768px) {
+    .Home h1 {
+      font-size: 2rem; /* Adjust font size for smaller screens */
+    }
+  }
+  
