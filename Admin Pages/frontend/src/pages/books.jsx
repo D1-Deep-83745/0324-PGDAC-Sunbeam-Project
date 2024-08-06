@@ -1,5 +1,6 @@
 import Sidebar from "../component/sidear";
 import Header from "../component/header";
+
 function Books() {
   return (
     <div className="container-fluid">
@@ -99,8 +100,8 @@ function Books() {
                     <td>2022-05-10</td>
                     <td>In Stock</td>
                     <td>
-                      <button class="edit-button">Edit</button>
-                      <button class="delete-button">Delete</button>
+                    <button class="edit-button">Edit</button>
+                    <button class="delete-button">Delete</button>
                     </td>
                   </tr>
                   <tr>

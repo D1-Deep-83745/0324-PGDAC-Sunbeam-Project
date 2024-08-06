@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify}
  from 'react-icons/bs'
  import imageSrc from '../images/facebook_profile_image.png';
-
+import { Link } from 'react-router-dom';
  function Header(){
     const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
     const Opensidebar = ()=>{
@@ -21,7 +21,7 @@ import {BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify}
                 <div className="header-right">
                     <BsFillBellFill className="icon"/>
                     <BsFillEnvelopeFill className="icon"/>
-                    <BsPersonCircle className='icon'/>
+                    <Link to="/profile"><BsPersonCircle className='icon'/></Link>
                 </div>
             </header>
        </div>

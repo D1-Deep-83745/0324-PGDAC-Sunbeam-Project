@@ -171,6 +171,9 @@ function Dashboard() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+
+
+            
             <div className="container-fluid mt-4" id="table-invoice">
               <h3>OPEN INVOICES</h3>
               <div className="table table-responsive container-fluid" style={{maxHeight:"400px", overflowY:"auto"}}>

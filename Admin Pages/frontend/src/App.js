@@ -1,9 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css'
 import Login from "./pages/Login";
 import Dashboard from "./pages/dashboard";
 import Books from "./pages/books";
 import Categories from "./pages/categories";
+import { ToastContainer } from "react-toastify";
 function App() {
   
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path="/Reports" element={<Reports/>}/>
         <Route path="/settings" element={<Settings/>}/> */}
       </Routes>
+      <ToastContainer />
     </div>
   );
 }

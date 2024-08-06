@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import imageSrc from '../images/facebook_profile_image.png';
 import { useState } from "react";
-import { toast } from "react-toastify";
 import login from "../service/user";
+import { toast } from "react-toastify";
 
 
 
@@ -15,19 +15,21 @@ function Login() {
     
     const navigate = useNavigate()
 
-    const onLogin = async (e) => {
-        e.preventDefault();
+    const onLogin = async () => {
+        
        if (email.length === 0) {
-      toast.warning('enter email')
+        console.log('Empty Email')
+        toast.warning('enter email')
     }else if (password.length === 0) {
       toast.warning('enter password')
     }else {
       const result = await login(email, password)
-      if (result['status'] === 'success') {
-        toast.success('welcome to the application')
+      if (result['mesg'] === 'Successful Auth!!!!') {
+
+         toast.success(`welcome ${result['firstName']} ${result['lastName']}` )
          console.log("navigating")
-        navigate('/dashboard')
-      
+       
+         navigate('/dashboard')
       }else {
         toast.error('invalid email or password')
       }
@@ -36,7 +38,7 @@ function Login() {
 
   return (
     <div className="login-dark">
-      <form onSubmit={onLogin}>
+      <div className="form">
       <div className="illustration ">
           <img src={imageSrc} alt="LOGO" style={{height:"120px"}} />
         </div>
@@ -62,13 +64,13 @@ function Login() {
         </div>
         <div className="form-group">
             <button className="btn btn-primary btn-block" 
-            type="submit">Log In</button>
+            onClick={onLogin}>Log In</button>
           
         </div>
         <a href="#" className="forgot">
           Forgot your email or password?
         </a>
-      </form>
+        </div>
     </div>
   );
 }
