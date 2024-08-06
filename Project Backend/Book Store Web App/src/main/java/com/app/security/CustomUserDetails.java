@@ -61,5 +61,12 @@ public class CustomUserDetails implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
+     
+	public String getFirstName() {
+        return user.getFirstName();
+    }
 
+    public String getLastName() {
+        return user.getLastName();
+    }
 }

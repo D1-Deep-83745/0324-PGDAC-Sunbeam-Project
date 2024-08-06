@@ -21,6 +21,7 @@ import com.app.dto.SignupDto;
 import com.app.dto.SignupResponse;
 import com.app.entities.Role;
 import com.app.entities.User;
+import com.app.security.CustomUserDetails;
 import com.app.security.JwtUtils;
 import com.app.service.UserService;
 
@@ -85,8 +86,11 @@ public class UserController {
 		Authentication verifiedToken = authMgr.authenticate(token);
 		//=> authentication n authorization  successful !
 		System.out.println(verifiedToken.getPrincipal().getClass());//custom user details object
+		CustomUserDetails userDetails = (CustomUserDetails) verifiedToken.getPrincipal();
+        String firstName = userDetails.getFirstName();
+        String lastName = userDetails.getLastName();
 		//create JWT n send it to the clnt in response
-		SignInResponse resp=new SignInResponse(jwtUtils.generateJwtToken(verifiedToken),"Successful Auth!!!!");
+		SignInResponse resp=new SignInResponse(jwtUtils.generateJwtToken(verifiedToken),"Successful Auth!!!!",firstName,lastName);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 
