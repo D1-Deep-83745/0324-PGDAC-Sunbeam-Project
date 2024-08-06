@@ -68,7 +68,7 @@ function Dashboard() {
 
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row" style={{height:"100%"}}>
         <div className="col-lg-2 ">
           <Sidebar />
         </div>
@@ -171,10 +171,13 @@ function Dashboard() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+
+
+            
             <div className="container-fluid mt-4" id="table-invoice">
               <h3>OPEN INVOICES</h3>
-              <div className="table table-responsive container-fluid">
-                <table className="table-hover" style={{width:"100%" }}>
+              <div className="table table-responsive container-fluid" style={{maxHeight:"400px", overflowY:"auto"}}>
+                <table className="table-hover" style={{ width: "100%" }}>
                   <thead>
                     <tr>
                       <th scope="col">invoice_id</th>

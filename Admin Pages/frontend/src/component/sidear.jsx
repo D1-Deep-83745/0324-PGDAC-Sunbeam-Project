@@ -5,11 +5,10 @@ import
   BsBook,
   BsBookHalf}
  from 'react-icons/bs'
-
+import { Link } from 'react-router-dom'
 function Sidebar (){
    return (
     <aside id="sidebar" >
-        
         
         <div className="sidebar-title">
         
@@ -21,41 +20,41 @@ function Sidebar (){
 
 
         <ul className="sidebar-list">
+        <Link to="/dashboard" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
-                   <BsGrid1X2Fill className="icon"/>Dashboard
-                </a>
+                  <BsGrid1X2Fill className="icon"/>Dashboard
             </li>
+            </Link>
+            <Link to="/Books" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsBookHalf className="icon"/>Books
-                </a>
             </li>
+            </Link>
+            <Link to="/Categories " className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsFillGrid3X3GapFill className="icon"/>Categories
-                </a>
             </li>
+            </Link>
+            <Link to="/users" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsPeopleFill className="icon"/>Users
-                </a>
             </li>
+            </Link>
+            <Link to="/Orders" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsListCheck className="icon"/>Inventory
-                </a>
             </li>
+            </Link>
+            <Link to="/Reports" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsMenuButtonWideFill className="icon"/>Reports
-                </a>
             </li>
+                </Link>
+            <Link to="/settings" className='text-decoration-none text-white menu'>
             <li className="sidebar-list-item">
-                <a href="/">
                    <BsFillGearFill className="icon"/>Settings
-                </a>
             </li>
+            </Link>
         </ul>
     </aside>
    )
