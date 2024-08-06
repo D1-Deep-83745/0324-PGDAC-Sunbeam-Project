@@ -1,5 +1,5 @@
 ## User_Credentials
-User_Credentials (
+CREATE TABLE User_Credentials (
     UserID INT PRIMARY KEY,
     Password VARCHAR(100) NOT NULL,
     FOREIGN KEY (UserID) REFERENCES User_Details(UserID)
