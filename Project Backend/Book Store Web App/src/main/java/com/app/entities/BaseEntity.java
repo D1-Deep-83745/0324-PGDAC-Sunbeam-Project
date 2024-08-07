@@ -28,12 +28,12 @@ public class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	// creation date	
+		
 	@Column(name="created_on")
-	@CreationTimestamp //adds creation date / time / time stamp for the entity
+	@CreationTimestamp 
 	private LocalDate createdOn;
-	// updation time stamp
-	@UpdateTimestamp //add last updated - date / time / time stamp for the entity
+	
+	@UpdateTimestamp 
 	@Column(name="updated_on")
 	private LocalDateTime updatedOn;
 

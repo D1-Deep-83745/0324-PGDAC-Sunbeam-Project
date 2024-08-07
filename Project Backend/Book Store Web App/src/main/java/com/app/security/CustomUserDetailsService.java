@@ -7,15 +7,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.dao.UserDao;
 import com.app.entities.User;
+import com.app.repository.UserRepository;
 
 
 @Service
 @Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
-	private UserDao userRepo;
+	private UserRepository userRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
