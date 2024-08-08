@@ -25,6 +25,11 @@ function Login() {
     }else {
       const result = await login(email, password)
       if (result['mesg'] === 'Successful Auth!!!!') {
+            
+        const { jwt, firstName , lastName } = result
+         
+            sessionStorage.setItem('token', jwt)
+            sessionStorage.setItem('name', firstName+" "+lastName)
 
          toast.success(`welcome ${result['firstName']} ${result['lastName']}` )
          console.log("navigating")

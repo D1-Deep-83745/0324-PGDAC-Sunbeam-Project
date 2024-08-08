@@ -23,4 +23,13 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(BookService.totalBooks());
 	}
 	
+	@GetMapping("/bookchartData")
+	public ResponseEntity<?> getTrendingBooks(){
+		return ResponseEntity.status(HttpStatus.OK).body(BookService.getTopSoldBooksAvailableQuantities());
+	}
+	
+	@GetMapping("/dayWiseSale")
+	public ResponseEntity<?> getDayWiseSale(){
+		return ResponseEntity.status(HttpStatus.OK).body(BookService.getDayWiseSalesForLast7Days());
+	}
 }

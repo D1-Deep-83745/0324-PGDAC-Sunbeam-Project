@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import Header from "../component/header";
 import Sidebar from "../component/sidear";
+import { Link } from "react-router-dom";
 import {
   BsFillArchiveFill,
   BsFillBellFill,
@@ -19,52 +21,84 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { tallyBookChartData, tallyBooks, tallyCategories, tallyDayWiseSale, tallyReviews, tallyUsers } from "../service/tally";
+import { getLatestInvoices } from "../service/order";
 
 function Dashboard() {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+   
+  const[books,setbooks] = useState('');
+  const[categories,setcategories] = useState('');
+  const[users,setUsers] = useState('');
+  const[reviews,setReviews] = useState('');
+  const[data,setData] = useState([]);
+  const[sale,setSale] = useState([]);
+
+  const [tableData,setTableData] = useState([]);
+
+  
+  useEffect(()=>{
+    tally()
+    },[])
+
+ 
+  const tally = async ()=>{
+    const bookResult = await tallyBooks()
+    if(bookResult.status=== 200){
+      setbooks(bookResult.data)
+    }
+
+    const categoryResult = await tallyCategories()
+    if(categoryResult.status=== 200){
+      setcategories(categoryResult.data)
+    }
+
+    const userResult = await tallyUsers()
+    if(userResult.status=== 200){
+      setUsers(userResult.data)
+    }
+    
+    const reviewResult = await tallyReviews()
+    if(reviewResult.status=== 200){
+      setReviews(reviewResult.data)
+    }
+
+    const chartDataResult = await tallyBookChartData()
+    if(chartDataResult.status=== 200){
+     // Transform the data to the required format
+     const transformedData = chartDataResult.data.map((book, index) => ({
+      name:`ID : ${book.id}`, 
+      sale: book.quantitySold, 
+      stock: book.remainingInventory,
+      amt: book.quantitySold 
+    }));
+    setData(transformedData);
+  } else {
+    console.error('Failed to fetch data:', chartDataResult.status);
+  }
+
+  const dayWiseSaleResult = await tallyDayWiseSale()
+  if(dayWiseSaleResult.status=== 200){
+    console.log(dayWiseSaleResult)
+    const transformedSale = dayWiseSaleResult.data.map((book, index) => ({
+     name:`Day: ${index +1}`, 
+     sale: book.totalQuantity, 
+     amt: book.totalQuantity 
+   }));
+   setSale(transformedSale);
+ }
+
+
+
+   const tableDataResponse =await getLatestInvoices()
+   if(tableDataResponse.status===200){
+      setTableData(tableDataResponse.data)      
+   }
+
+}
+
+   
+
+
 
   return (
     <div className="container-fluid">
@@ -84,14 +118,14 @@ function Dashboard() {
                   <h3>BOOKS</h3>
                   <BsFillArchiveFill className="card_icon" />
                 </div>
-                <h1>300</h1>
+                <h1>{books}</h1>
               </div>
               <div className="card">
                 <div className="card-inner">
                   <h3>CATEGORIES</h3>
                   <BsFillGrid3X3GapFill className="card_icon" />
                 </div>
-                <h1>12</h1>
+                <h1>{categories}</h1>
               </div>
 
               <div className="card">
@@ -99,15 +133,15 @@ function Dashboard() {
                   <h3>USERS</h3>
                   <BsPeopleFill className="card_icon" />
                 </div>
-                <h1>300</h1>
+                <h1>{users}</h1>
               </div>
 
               <div className="card">
                 <div className="card-inner">
-                  <h3>ALERTS</h3>
+                  <h3>REVIEWS</h3>
                   <BsFillBellFill className="card_icon" />
                 </div>
-                <h1>42</h1>
+                <h1>{reviews}</h1>
               </div>
             </div>
 
@@ -132,12 +166,12 @@ function Dashboard() {
                   <Tooltip />
                   <Legend />
                   <Bar
-                    dataKey="pv"
+                    dataKey="sale"
                     fill="#8884d8"
                     activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
                   <Bar
-                    dataKey="uv"
+                    dataKey="stock"
                     fill="#82ca9d"
                     activeBar={<Rectangle fill="gold" stroke="purple" />}
                   />
@@ -148,7 +182,7 @@ function Dashboard() {
                 <LineChart
                   width={500}
                   height={300}
-                  data={data}
+                  data={sale}
                   margin={{
                     top: 5,
                     right: 30,
@@ -163,11 +197,11 @@ function Dashboard() {
                   <Legend />
                   <Line
                     type="monotone"
-                    dataKey="pv"
+                    dataKey="sale"
                     stroke="#8884d8"
                     activeDot={{ r: 8 }}
                   />
-                  <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                 
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -191,41 +225,25 @@ function Dashboard() {
                   </thead>
 
                   <tbody>
+                   {tableData.length > 0 &&
+                    tableData.map((item) => {
+                       return <tr>
+                             <td>"Inv-"+{item.id}</td>
+                             <td>"Cust-"{item.customerId}</td>
+                             <td>{item.invoiceDate}</td>
+                             <td>{item.dueDate}</td>
+                             <td>{item.totalAmount}</td>
+                             <td>{item.paidAmount}</td>
+                             <td>{item.status}</td>
+                       </tr>
+                    })}
+
+                    {tableData.length === 0 && (
+                    <h4>There are no Invoices to Show</h4>
+                    )}
+                    
                     <tr>
-                      <th scope="row">INV-001</th>
-                      <td>Customer A</td>
-                      <td>2024-06-01</td>
-                      <td>2024-06-15</td>
-                      <td>$500.00</td>
-                      <td>$00.00</td>
-                      <td>PENDING</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">INV-002</th>
-                      <td>Customer B</td>
-                      <td>2024-06-03</td>
-                      <td>2024-06-18</td>
-                      <td>$700.00</td>
-                      <td>$700.00</td>
-                      <td>PAID</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">INV-003</th>
-                      <td>Customer C</td>
-                      <td>2024-06-05</td>
-                      <td>2024-06-20</td>
-                      <td>$550.00</td>
-                      <td>$300.00</td>
-                      <td>PARTIAL</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">INV-004</th>
-                      <td>Customer D</td>
-                      <td>2024-06-09</td>
-                      <td>2024-06-25</td>
-                      <td>$300.00</td>
-                      <td>$00.00</td>
-                      <td>OVER DUE</td>
+                      <td colSpan={6}> <Link to="/orders"></Link>load More...</td>
                     </tr>
                   </tbody>
                 </table>
