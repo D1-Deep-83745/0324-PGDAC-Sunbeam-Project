@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,6 +94,11 @@ public class UserController {
 		SignInResponse resp=new SignInResponse(jwtUtils.generateJwtToken(verifiedToken),"Successful Auth!!!!",firstName,lastName);
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
-
+    
+	
+	@GetMapping("/count")
+	public ResponseEntity<?> Users(){
+		return ResponseEntity.status(HttpStatus.OK).body(userService.totalUsers());
+	}
  
 }

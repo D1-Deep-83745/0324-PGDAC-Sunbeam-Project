@@ -5,15 +5,15 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.dao.UserDao;
 import com.app.dto.SignInDto;
 import com.app.entities.User;
+import com.app.repository.UserRepository;
 
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDao udao;
+    private UserRepository udao;
 	
 	@Override
 	public String signIn(SignInDto user) {
@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(User user) {
 		udao.save(user);
 		
+	}
+
+	@Override
+	public int totalUsers() {
+		return udao.totalUsers();
 	}
 
 }

@@ -4,10 +4,13 @@ import com.app.dto.SignInDto;
 import com.app.entities.User;
 
 public interface UserService {
-     public String signIn(SignInDto user);
+	
+     String signIn(SignInDto user);
 
-	public boolean existsByEmail(String email);
+	 boolean existsByEmail(String email);
 
-	public void saveUser(User user);   
+	 void saveUser(User user);   
+	 
+	 int totalUsers();
 	
 }

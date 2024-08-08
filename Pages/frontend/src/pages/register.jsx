@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 const Register = () => {
   const [formValues, setFormValues] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -22,14 +24,9 @@ const Register = () => {
     });
   };
 
-  const nav=useNavigate();
+  const navigate = useNavigate();
 
-  const handleregister=()=>{
-    nav(`/login`)
-  }
-
-
-  const handleSubmit = (event) => {
+  const handleRegister = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === false) {
@@ -41,17 +38,42 @@ const Register = () => {
     } else {
       setPasswordMatch(true);
       setValidated(true);
-      // Handle form submission
+
+      try {
+        const response = await fetch('http://localhost:8080/bookstore/user/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            email: formValues.email,
+            password: formValues.password,
+            role: "", // Assuming this is optional or handled in backend
+          }),
+        });
+
+        if (response.ok) {
+          toast.success('Registration successful! You can now log in.');
+          navigate('/login');
+        } else {
+          const errorText = await response.text();
+          toast.error(`Registration failed: ${errorText}`);
+        }
+      } catch (error) {
+        toast.error('An error occurred. Please try again.');
+      }
     }
   };
 
   const togglePasswordVisibility = (id) => {
     const input = document.getElementById(id);
-    if (input.type === 'password') {
-      input.type = 'text';
-    } else {
-      input.type = 'password';
-    }
+    input.type = input.type === 'password' ? 'text' : 'password';
+  };
+
+  const goToLogin = () => {
+    navigate('/login');
   };
 
   return (
@@ -70,19 +92,32 @@ const Register = () => {
     >
       <Container className="mt-5 p-4" style={{ maxWidth: '500px', backgroundColor: 'rgba(255, 255, 255, 0.9)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
         <h1 style={{ fontFamily: 'Georgia, serif', textAlign: 'center', marginBottom: '20px', color: '#343a40' }}>User Registration</h1>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="username">
-            <Form.Label>Name:</Form.Label>
+        <Form noValidate validated={validated} onSubmit={handleRegister}>
+          <Form.Group className="mb-3" controlId="firstName">
+            <Form.Label>First Name:</Form.Label>
             <Form.Control
               type="text"
-              name="username"
+              name="firstName"
               required
               pattern="[^0-9]+"
-              title="Name should not contain numbers"
-              value={formValues.username}
+              title="First name should not contain numbers"
+              value={formValues.firstName}
               onChange={handleInputChange}
             />
-            <Form.Control.Feedback type="invalid">Please provide a valid name without numbers.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Please provide a valid first name without numbers.</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="lastName">
+            <Form.Label>Last Name:</Form.Label>
+            <Form.Control
+              type="text"
+              name="lastName"
+              required
+              pattern="[^0-9]+"
+              title="Last name should not contain numbers"
+              value={formValues.lastName}
+              onChange={handleInputChange}
+            />
+            <Form.Control.Feedback type="invalid">Please provide a valid last name without numbers.</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email:</Form.Label>
@@ -132,9 +167,10 @@ const Register = () => {
             </InputGroup>
           </Form.Group>
           <Button type="submit" className="btn-primary" style={{ width: '100%', padding: '10px' }}>Register</Button>
-          <Button onClick={handleregister} variant="secondary" className="btn-secondary mt-2" style={{ width: '100%' }}>Already a user? Login</Button>
+          <Button onClick={goToLogin} variant="secondary" className="btn-secondary mt-2" style={{ width: '100%' }}>Already a user? Login</Button>
         </Form>
       </Container>
+      <ToastContainer /> {/* Add ToastContainer for toasts */}
     </div>
   );
 };
