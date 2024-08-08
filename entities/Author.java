@@ -17,10 +17,6 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Author extends BaseEntity{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long authorId;
-	
 	@Column(length = 20)
 	private String authorName;
 }
