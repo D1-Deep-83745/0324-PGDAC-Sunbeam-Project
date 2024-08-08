@@ -2,7 +2,7 @@ import BookListing from "../components/Booklisting";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 
-export function Category6(){
+export function Travel(){
     return (
         <>
         <Header/>
@@ -10,11 +10,9 @@ export function Category6(){
         <br />
         <br />
         <BookListing/>
-        <BookListing/>
-        <BookListing/>
         <Footer/>
         </>
     );
 }
 
-export default Category6;
+export default Travel;

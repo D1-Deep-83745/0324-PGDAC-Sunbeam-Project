@@ -23,8 +23,6 @@ export function Home() {
     <Slider slides={slides} />
     <br />
     <BookListing /> 
-    <BookListing /> 
-    <BookListing /> 
     <Footer/>
     </div>
   );
