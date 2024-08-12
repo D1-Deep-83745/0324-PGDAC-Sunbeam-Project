@@ -20,9 +20,6 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Publisher extends BaseEntity{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long publisherId;
 	
 	@Column(length = 20)
 	private String publisherName;
