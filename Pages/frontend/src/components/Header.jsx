@@ -63,6 +63,10 @@ function Header() {
     }
   };
 
+  const handleProfile=()=>{
+    navigate("/user/profile");
+  }
+
   return (
     <div>
       <Navbar bg="light" expand="lg" fixed="top">
@@ -88,9 +92,14 @@ function Header() {
           </Form>
           <div className="d-flex align-items-center">
             {isLoggedIn ? (
-              <Button onClick={handleLogout} variant="outline-primary" className="me-2">
-                <FontAwesomeIcon icon={faUser} /> Logout
-              </Button>
+              <>
+                <Button onClick={handleProfile} variant="outline-secondary" className="me-2">
+                  <FontAwesomeIcon icon={faUser} /> Edit Profile
+                </Button>
+                <Button onClick={handleLogout} variant="outline-primary" className="me-2">
+                  <FontAwesomeIcon icon={faUser} /> Logout
+                </Button>
+              </>
             ) : (
               <Button as={Link} to="/login" variant="outline-primary" className="me-2">
                 <FontAwesomeIcon icon={faUser} /> Login

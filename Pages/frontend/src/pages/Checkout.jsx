@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Form , Table} from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Table } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import axios from 'axios';
@@ -12,12 +12,12 @@ const CheckoutPage = () => {
   const { cartItems } = location.state || {};
 
   const userId = sessionStorage.getItem("userId");
+  const token = sessionStorage.getItem('token');
 
   if (!cartItems) {
     return <div>Your order is confirmed</div>;
   }
 
-  // State for addresses and address handling
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isAddingAddress, setIsAddingAddress] = useState(false);
@@ -30,20 +30,26 @@ const CheckoutPage = () => {
   });
 
   useEffect(() => {
+    console.log('Fetching addresses for user ID:', userId);
+    
     const fetchAddresses = async () => {
       try {
         const response = await axios.get(`${config.url}/address/user/${userId}`, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            Authorization: `Bearer ${token}`
           }
         });
         setAddresses(response.data);
       } catch (err) {
         console.error('Error fetching addresses', err);
+        toast.error('Failed to fetch addresses');
       }
     };
-    fetchAddresses();
-  }, [userId]);
+    
+    if (userId) {
+      fetchAddresses();
+    }
+  }, [userId, token]);
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -62,7 +68,7 @@ const CheckoutPage = () => {
     try {
       await axios.post(`${config.url}/address/user/${userId}`, addressForm, {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`
+          Authorization: `Bearer ${token}`
         }
       });
       setAddresses([...addresses, addressForm]);
@@ -93,9 +99,6 @@ const CheckoutPage = () => {
       <Row>
         <Col>
           <h1>Checkout Details</h1>
-        </Col>
-        <Col className="text-end">
-          <Button variant="success" onClick={() => navigate('/user/profile')}>Edit Profile</Button>
         </Col>
       </Row>
       <br />

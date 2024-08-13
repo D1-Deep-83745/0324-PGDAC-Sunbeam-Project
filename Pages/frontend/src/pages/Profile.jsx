@@ -74,11 +74,13 @@ const ProfilePage = () => {
   return (
     <div>
       <Header />
-      <Container className="mt-4">
+      <br/>
+      <br/>
+      <Container className="mt-4 mb-5">
         <h1>Profile</h1>
         {success && <Alert variant="success">{success}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formFirstName">
+          <Form.Group controlId="formFirstName" className='mt-4'>
             <Form.Label>First Name</Form.Label>
             <Form.Control
               type="text"
@@ -98,31 +100,32 @@ const ProfilePage = () => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="formPhoneNumber">
+          <Form.Group controlId="formPhoneNo">
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
               type="tel"
-              name="phoneNumber"
-              value={user.phoneNumber || ''}
+              name="phoneNo"
+              value={user.phoneNo || ''}
               onChange={handleChange}
               required
             />
           </Form.Group>
           <Form.Group controlId="formGender">
-            <Form.Label>Gender</Form.Label>
-            <Form.Control
-              as="select"
-              name="gender"
-              value={user.gender || ''}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </Form.Control>
+          <Form.Label>Gender</Form.Label>
+          <Form.Control
+            as="select"
+            name="gender"
+            value={user.gender ? user.gender.toUpperCase() : ''}
+            onChange={handleChange}
+            required
+          >
+           <option value="">Select Gender</option>
+           <option value="M">Male</option>
+           <option value="F">Female</option>
+           <option value="O">Other</option>
+          </Form.Control>
           </Form.Group>
+
           <Form.Group controlId="formDOB">
             <Form.Label>Date of Birth</Form.Label>
             <Form.Control
@@ -133,7 +136,7 @@ const ProfilePage = () => {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="mt-3">
+          <Button variant="primary" type="submit" className="mt-5">
             Update Profile
           </Button>
         </Form>

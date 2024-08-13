@@ -8,7 +8,7 @@ const BookListing = () => {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedSortOrder, setSelectedSortOrder] = useState('default'); // 'default', 'price-asc', 'price-desc'
+  const [selectedSortOrder, setSelectedSortOrder] = useState('default');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -20,8 +20,8 @@ const BookListing = () => {
         setBooks(booksResponse.data);
 
         // Fetch categories
-        const categoriesResponse = await axios.get(`${config.url}/categories`);
-        setCategories(['All', ...categoriesResponse.data.map(cat => cat.categoryName)]); // Include 'All' option
+        const categoriesResponse = await axios.get(`${config.url}/categories/listAll`);
+        setCategories(['All', ...categoriesResponse.data.map(cat => cat.categoryName)]);
       } catch (err) {
         setError(err.message);
       }
