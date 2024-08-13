@@ -12,3 +12,18 @@ export async function getLatestInvoices(){
     })
     return response
  }
+
+ 
+export async function getAllInvoices(){
+
+    const token = sessionStorage.getItem('token')
+ 
+    const response = await axios.get(`${config.url}/orders/allInvoices`,{
+     headers: {
+         Authorization: "Bearer "+token,
+     },
+    })
+    return response
+ }
+
+ 

@@ -1,28 +1,12 @@
 import { useEffect, useState } from "react";
 import Header from "../component/header";
 import Sidebar from "../component/sidear";
-import { Link } from "react-router-dom";
-import {
-  BsFillArchiveFill,
-  BsFillBellFill,
-  BsFillGrid3X3GapFill,
-  BsPeopleFill,
-} from "react-icons/bs";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  Rectangle,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import LatestInvoices from "../component/latestInvoices";
+import BarChatTemp from "../component/barChartTemp";
+import LineChartTemp from "../component/lineChartTemp";
 import { tallyBookChartData, tallyBooks, tallyCategories, tallyDayWiseSale, tallyReviews, tallyUsers } from "../service/tally";
 import { getLatestInvoices } from "../service/order";
+import StatCards from "../component/statCards";
 
 function Dashboard() {
    
@@ -32,7 +16,6 @@ function Dashboard() {
   const[reviews,setReviews] = useState('');
   const[data,setData] = useState([]);
   const[sale,setSale] = useState([]);
-
   const [tableData,setTableData] = useState([]);
 
   
@@ -103,152 +86,31 @@ function Dashboard() {
   return (
     <div className="container-fluid">
       <div className="row" style={{height:"100%"}}>
+        
         <div className="col-lg-2 ">
           <Sidebar />
         </div>
+
         <div className="col ms-0">
           <Header />
+
           <main className="main-container">
+
             <div className="main-title">
               <h3>DASHBOARD</h3>
             </div>
-            <div className="main-cards">
-              <div className="card">
-                <div className="card-inner">
-                  <h3>BOOKS</h3>
-                  <BsFillArchiveFill className="card_icon" />
-                </div>
-                <h1>{books}</h1>
-              </div>
-              <div className="card">
-                <div className="card-inner">
-                  <h3>CATEGORIES</h3>
-                  <BsFillGrid3X3GapFill className="card_icon" />
-                </div>
-                <h1>{categories}</h1>
-              </div>
-
-              <div className="card">
-                <div className="card-inner">
-                  <h3>USERS</h3>
-                  <BsPeopleFill className="card_icon" />
-                </div>
-                <h1>{users}</h1>
-              </div>
-
-              <div className="card">
-                <div className="card-inner">
-                  <h3>REVIEWS</h3>
-                  <BsFillBellFill className="card_icon" />
-                </div>
-                <h1>{reviews}</h1>
-              </div>
-            </div>
-
-            {/* charts */}
+            
+            <StatCards books={books} categories={categories} users={users} reviews={reviews}/>     
 
             <div className="charts">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  width={500}
-                  height={300}
-                  data={data}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar
-                    dataKey="sale"
-                    fill="#8884d8"
-                    activeBar={<Rectangle fill="pink" stroke="blue" />}
-                  />
-                  <Bar
-                    dataKey="stock"
-                    fill="#82ca9d"
-                    activeBar={<Rectangle fill="gold" stroke="purple" />}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  width={500}
-                  height={300}
-                  data={sale}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="sale"
-                    stroke="#8884d8"
-                    activeDot={{ r: 8 }}
-                  />
-                 
-                </LineChart>
-              </ResponsiveContainer>
+            <BarChatTemp props={data}/>
+            <LineChartTemp props={sale}/>
             </div>
-
-
-            
+  
             <div className="container-fluid mt-4" id="table-invoice">
-              <h3>OPEN INVOICES</h3>
-              <div className="table table-responsive container-fluid" style={{maxHeight:"400px", overflowY:"auto"}}>
-                <table className="table-hover" style={{ width: "100%" }}>
-                  <thead>
-                    <tr>
-                      <th scope="col">invoice_id</th>
-                      <th scope="col">customer_id:</th>
-                      <th scope="col">invoice_date</th>
-                      <th scope="col">due_date</th>
-                      <th scope="col">total_amount</th>
-                      <th scope="col">paid_amount</th>
-                      <th scope="col">status</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                   {tableData.length > 0 &&
-                    tableData.map((item) => {
-                       return <tr>
-                             <td>"Inv-"+{item.id}</td>
-                             <td>"Cust-"{item.customerId}</td>
-                             <td>{item.invoiceDate}</td>
-                             <td>{item.dueDate}</td>
-                             <td>{item.totalAmount}</td>
-                             <td>{item.paidAmount}</td>
-                             <td>{item.status}</td>
-                       </tr>
-                    })}
-
-                    {tableData.length === 0 && (
-                    <h4>There are no Invoices to Show</h4>
-                    )}
-                    
-                    <tr>
-                      <td colSpan={6}> <Link to="/orders"></Link>load More...</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <LatestInvoices props={tableData}/>
             </div>
+
           </main>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import imageSrc from '../images/facebook_profile_image.png';
 import { useState } from "react";
-import login from "../service/user";
+import {login} from '../service/user'
 import { toast } from "react-toastify";
 
 
@@ -23,14 +23,17 @@ function Login() {
     }else if (password.length === 0) {
       toast.warning('enter password')
     }else {
+
+      
       const result = await login(email, password)
       if (result['mesg'] === 'Successful Auth!!!!') {
             
-        const { jwt, firstName , lastName } = result
+        const { jwt, firstName , lastName ,role ,id} = result
          
             sessionStorage.setItem('token', jwt)
             sessionStorage.setItem('name', firstName+" "+lastName)
-
+            sessionStorage.setItem('role',role)
+            sessionStorage.setItem('id',id)
          toast.success(`welcome ${result['firstName']} ${result['lastName']}` )
          console.log("navigating")
        
@@ -72,9 +75,7 @@ function Login() {
             onClick={onLogin}>Log In</button>
           
         </div>
-        <a href="#" className="forgot">
-          Forgot your email or password?
-        </a>
+       
         </div>
     </div>
   );
