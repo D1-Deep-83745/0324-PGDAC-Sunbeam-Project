@@ -4,7 +4,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 //import { text } from '@fortawesome/fontawesome-svg-core';
-
+import { useCart } from '../pages/cart';
 function Header() {
   
 
@@ -26,7 +26,7 @@ function Header() {
             <div className="d-flex">
              <Link to="/login" className="btn btn-outline-primary me-2"><FontAwesomeIcon icon={faUser} /> Login</Link>
             <Link to="/wishlist" className="btn btn-outline-secondary me-2"><FontAwesomeIcon icon={faHeart} /></Link>
-            <Link to="/cart" className="btn btn-outline-danger"><FontAwesomeIcon icon={faShoppingCart} /> </Link>
+            <Link to="/cart" className="btn btn-outline-danger"><FontAwesomeIcon icon={faShoppingCart} /></Link>
             </div>
           </div>
         </div>
@@ -39,12 +39,12 @@ function Header() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="w-100 justify-content-around">
-          <Nav.Link href="/category1"><b>Category 1</b></Nav.Link>
-          <Nav.Link href="/category2"><b>Category 2</b></Nav.Link>
-          <Nav.Link href="/category3"><b>Category 3</b></Nav.Link>
-          <Nav.Link href="/category4"><b>Category 4</b></Nav.Link>
-          <Nav.Link href="/category5"><b>Category 5</b></Nav.Link>
-          <Nav.Link href="/category6"><b>Category 6</b></Nav.Link>
+          <Nav.Link href="/category1"><b>New-Release</b></Nav.Link>
+          <Nav.Link href="/category2"><b>Fiction</b></Nav.Link>
+          <Nav.Link href="/category3"><b>Non-Fiction</b></Nav.Link>
+          <Nav.Link href="/category4"><b>Childrens</b></Nav.Link>
+          <Nav.Link href="/category5"><b>Novels</b></Nav.Link>
+          <Nav.Link href="/category6"><b>Travel</b></Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

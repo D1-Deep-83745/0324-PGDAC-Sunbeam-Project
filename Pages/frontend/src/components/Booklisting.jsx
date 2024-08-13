@@ -1,48 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-const books = [
-  { id: 1, title: 'Book Title', price: '₹300', image: '/images/book6.jpg'  },
-  { id: 2, title: 'Book Title', price: '₹150', image: '/images/book5.jpg'  },
-  { id: 3, title: 'Book Title', price: '₹200', image: '/images/book4.jpg' },
-  { id: 4, title: 'Book Title', price: '₹250', image: '/images/book5.jpg'  },
-  { id: 5, title: 'Book Title', price: '₹300', image: '/images/book4.jpg' },
-  { id: 6, title: 'Book Title', price: '₹350', image: '/images/Book1.jpg'  },
-  // Add more books here if needed
-];
+import axios from 'axios';
+import config from '../config';
 
 const BookListing = () => {
- 
+  const [books, setBooks] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleBookClick = () => {
-    // Navigate to BookDetail component with the specific book id
-    navigate(`/book`);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/bookstore/books/list`);
+        setBooks(response.data);
+      } catch (err) {
+        setError(err.message);
+      } 
+    };
+
+    fetchBooks();
+  }, []);
+
+  const handleBookClick = (id) => {
+    navigate(`/books/${id}`);
   };
+
+  if (error) return <p>Error loading books: {error}</p>;
+
   return (
-    <div onClick={() => handleBookClick()} className="container">
-      {[...Array(3)].map((_, rowIndex) => (
-        <Row key={rowIndex} className="mb-3 justify-content-around">
-          {[...Array(6)].map((_, colIndex) => {
-            const bookIndex = rowIndex * 6 + colIndex;
-            const book = books[bookIndex];
-            return (
-              <Col key={colIndex} md={2}>
-                {book && (
-                  <Card>
-                    <Card.Img variant="top" src={book.image} />
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Card.Text>{book.price}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                )}
+    <div className="container">
+    {[...Array(Math.ceil(books.length / 6))].map((_, rowIndex) => (
+      <Row key={rowIndex} className="mb-3">
+        {[...Array(6)].map((_, colIndex) => {
+          const bookIndex = rowIndex * 6 + colIndex;
+          const book = books[bookIndex];
+          return (
+            book ? (
+              <Col key={book.id} md={2}>
+                <Card onClick={() => handleBookClick(book.id)} style={{ cursor: 'pointer' }}>
+                  <Card.Img variant="top" src={"/images/book5.jpg"} />
+                  <Card.Body>
+                    <Card.Title>{book.title}</Card.Title>
+                    <Card.Text>₹{book.price}</Card.Text>
+                  </Card.Body>
+                </Card>
               </Col>
-            );
-          })}
-        </Row>
-      ))}
-    </div>
+            ) : null
+          );
+        })}
+      </Row>
+    ))}
+  </div>
+  
   );
 };
 
