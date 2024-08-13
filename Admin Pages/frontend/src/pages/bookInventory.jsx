@@ -2,7 +2,8 @@ import Sidebar from "../component/sidear";
 import Header from "../component/header";
 import InventoryTable from "../component/inventorytable";
 import { useEffect, useState } from "react";
-import { getInventory } from "../service/books";
+import { addInventory, getInventory, updateInventory } from "../service/books";
+import { toast } from "react-toastify";
 
 function BookInventory() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -10,12 +11,30 @@ function BookInventory() {
     const [tableData, setTableData] = useState([]);
     const [filteredTableData, setFilteredTableData] = useState([]);
 
-    const handleAdd = () => {
-        // Add functionality here
+    const handleAdd = async (newItem) => {
+        try {
+            const result = await addInventory(newItem);
+            if (result.status === 201 && result.data === `Inventory for book ${newItem.title} created successfully.`) {
+                toast.success("Item added successfully");
+                await loadOnStartup();  // Ensure it waits for the data to be loaded
+            } else {
+                toast.error(result.data);
+            }
+        } catch (error) {
+            toast.error("An error occurred while adding the item.");
+        }
     };
 
-    const handleUpdate = () => {
-        // Update functionality here
+    const handleUpdate = async (updatedItem) => {
+        try {
+            const result = await updateInventory(updatedItem);
+            if (result.status === 200) {
+                toast.success("Item updated successfully");
+                await loadOnStartup();  // Ensure it waits for the data to be loaded
+            }
+        } catch (error) {
+            toast.error("An error occurred while updating the item.");
+        }
     };
 
     useEffect(() => {
@@ -27,10 +46,16 @@ function BookInventory() {
     }, [searchQuery, select]);
 
     const loadOnStartup = async () => {
-        const inventoryResult = await getInventory();
-        if (inventoryResult.status === 200) {
-            setTableData(inventoryResult.data);
-            setFilteredTableData(inventoryResult.data); // Initialize the filtered data
+        try {
+            const inventoryResult = await getInventory();
+            if (inventoryResult.status === 200) {
+                setTableData(inventoryResult.data);
+                setFilteredTableData(inventoryResult.data); // Initialize the filtered data
+            } else {
+                toast.error("Failed to load inventory data.");
+            }
+        } catch (error) {
+            toast.error("An error occurred while loading inventory data.");
         }
     };
 

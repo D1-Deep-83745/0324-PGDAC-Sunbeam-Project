@@ -15,7 +15,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class SignInDto {
 	@NotEmpty(message = "Email can't be blank")
 	@Email(message = "Invalid email format")

@@ -6,4 +6,5 @@ import com.app.dto.InvoiceTableData;
 
 public interface OrderService {
      List<InvoiceTableData> getLatestInvoices();
+     List<InvoiceTableData> getAllInvoices();
 }

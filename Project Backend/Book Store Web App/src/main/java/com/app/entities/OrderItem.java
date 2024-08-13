@@ -1,7 +1,5 @@
 package com.app.entities;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,6 +23,6 @@ public class OrderItem extends BaseEntity {
     private OrderDetails order;  
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id" , nullable = false)
     private BookDetails book; 
 }

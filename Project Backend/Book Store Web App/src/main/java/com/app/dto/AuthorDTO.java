@@ -9,11 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInResponse {
-	private String jwt;
-	private String mesg;
-	private String firstName;
-	private String lastName;
-	private String Role;
+public class AuthorDTO {
 	private Long id;
+	
+	private String authorName;
+	
 }

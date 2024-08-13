@@ -166,3 +166,37 @@ export async function addBook(title, description, price, publishDate, categoryId
     });
     return response;
 }
+
+
+
+export async function updateInventory(updatedItem) {
+    const token = sessionStorage.getItem('token');
+    const body = {
+        available_quantity: updatedItem.available_quantity 
+    };
+   
+    const response = await axios.put(`${config.url}/books/inventory/${updatedItem.id}`, body, {
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+    });
+    return response;
+}
+
+
+export async function addInventory(newItem) {
+    const token = sessionStorage.getItem('token');
+
+    const body = { 
+     title:newItem.title,
+     available_quantity:newItem.available_quantity,
+     location:newItem.location
+    };
+   
+    const response = await axios.post(`${config.url}/books/inventory/add`, body, {
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+    });
+    return response;
+}

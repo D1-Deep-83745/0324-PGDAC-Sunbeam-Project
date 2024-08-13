@@ -10,7 +10,5 @@ import com.app.entities.BookInventory;
 
 public interface BookInventoryRepository extends JpaRepository<BookInventory, Long> {
 	Optional<BookInventory> findByBookId(Long bookId);
-	
-	  @Query("SELECT b.id FROM BookDetails b WHERE b.title = :title")
-	  Long findBookIdByTitle(@Param("title") String title);
+	   
 }

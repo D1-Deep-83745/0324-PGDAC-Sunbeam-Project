@@ -12,7 +12,7 @@ function InventoryTable({ inventoryData, onAddItem, onUpdateItem }) {
 
     const handleIncrementQuantity = (item) => {
         setEditingItem(item);
-        setQuantityToAdd(''); // Clear any previous input
+        setQuantityToAdd(''); 
     };
 
     const handleQuantityChange = (e) => {
@@ -20,7 +20,7 @@ function InventoryTable({ inventoryData, onAddItem, onUpdateItem }) {
     };
 
     const handleAddQuantityClick = () => {
-        if (quantityToAdd) {
+        if (quantityToAdd && editingItem) {
             const updatedItem = {
                 ...editingItem,
                 available_quantity: editingItem.available_quantity + parseInt(quantityToAdd, 10),
