@@ -2,6 +2,8 @@ package com.app.dto;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +22,5 @@ public class BookDetailsDTO {
     private String categoryName;
     private String authorName;
     private String publisherName;
-    // Getters and setters
 }
 

@@ -14,4 +14,6 @@ public class SignInResponse {
 	private String mesg;
 	private String firstName;
 	private String lastName;
+	private String Role;
+	private Long userid;
 }

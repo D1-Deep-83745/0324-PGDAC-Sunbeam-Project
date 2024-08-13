@@ -1,14 +1,14 @@
 package com.app.entities;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,15 @@ public class OrderDetails extends BaseEntity {
    @JoinColumn(name = "user_id")
    private User user;
    
-   @ManyToMany
-   @JoinTable(name = "order_book",joinColumns = @JoinColumn(name = "order_id"),inverseJoinColumns =  @JoinColumn(name = "book_id"))
-   private Set<BookDetails> books = new HashSet<BookDetails>();
+   @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<OrderItem> itemList = new ArrayList<OrderItem>();
+   
+   @OneToOne(mappedBy = "orders" ,cascade = CascadeType.ALL )
+   private Transaction transaction;
+   
+   public double getTotalAmount() {
+       return itemList.stream()
+               .mapToDouble(item -> item.getPrice() * item.getQuantity())
+               .sum();
+   }
 }

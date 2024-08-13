@@ -2,10 +2,12 @@ package com.app.service;
 
 import java.util.List;
 
-import com.app.entities.Category;
+import com.app.dto.CategoryDTO;
 
 public interface CategoryService {
 	int totalCategories() ;
 
-	List<Category> getAllCategories();
+	List<CategoryDTO> getAllCategories();
+	
+	String addCategory(CategoryDTO category);
 }

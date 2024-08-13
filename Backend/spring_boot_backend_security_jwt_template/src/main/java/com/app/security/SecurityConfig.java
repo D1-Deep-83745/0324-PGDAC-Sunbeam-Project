@@ -41,27 +41,22 @@ public class SecurityConfig {
 		//URL based authorization rules
 		http.cors()
 		.and().
-		//disable CSRF token generation n verification
 		csrf()	.disable()
 		.exceptionHandling().authenticationEntryPoint(authEntry).
 		and().
 		authorizeRequests()
-	
-		.antMatchers("/products/view", "/user/signup", "/user/signin", "/v*/api-doc*/**", "/swagger-ui/**","books/list").permitAll()
-        //.antMatchers(HttpMethod.OPTIONS).permitAll()
-        //.antMatchers("/bookstore/books/list").permitAll()
-        .antMatchers("/**").permitAll() // Allow access to all endpoints
-		// only required for JS clnts (react / angular) : for the pre flight requests
+		.antMatchers("/user/signup","/user/signin",
+				"/v*/api-doc*/**","/swagger-ui/**" ,"/books/list" ,"/categories/listAll" ,"/books/**" , "/reviews/**" , "/user/profile").permitAll()
 		.antMatchers(HttpMethod.OPTIONS).permitAll()
 		.antMatchers("/products/purchase/**").hasRole("CUSTOMER")
-		.antMatchers("/books/add","/books/count","/categories/**","/user/count","/reviews/count").hasAnyRole("ADMIN" ,"SALES")
+		.antMatchers("/orders/**","/categories/**","/user/count","/reviews/count","/author/add","/publisher/add",
+				"user/getAll","/user/{id}").hasAnyRole("ADMIN" ,"SALES")
+		.antMatchers("/user/RegisterSalesPerson").hasRole("ADMIN")
 		.anyRequest().authenticated()
 		.and()
-		//to tell spring sec : not to use HttpSession to store user's auth details
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		//inserting jwt filter before sec filter
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	
 		return http.build();

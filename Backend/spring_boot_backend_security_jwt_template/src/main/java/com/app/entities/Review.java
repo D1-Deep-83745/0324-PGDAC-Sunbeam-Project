@@ -27,6 +27,6 @@ public class Review extends BaseEntity {
 	
 	private int rating;
 	
-	@Column(length = 100)
+	@Column(length = 500)
 	private String comment; 
 }

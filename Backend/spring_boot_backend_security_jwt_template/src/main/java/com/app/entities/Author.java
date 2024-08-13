@@ -22,8 +22,8 @@ public class Author extends BaseEntity{
 	@Column(length = 20)
 	private String authorName;
 	
-//	@OneToMany
-//	(mappedBy = "author",
-//	cascade = CascadeType.ALL)
-//	private List<BookDetails> books = new ArrayList<BookDetails>();
+	@OneToMany
+	(mappedBy = "author",
+	cascade = CascadeType.ALL)
+	private List<BookDetails> books = new ArrayList<BookDetails>();
 }

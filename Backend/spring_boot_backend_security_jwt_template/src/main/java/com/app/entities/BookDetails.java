@@ -21,13 +21,13 @@ import lombok.ToString;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"reviews","stock"})
 @Entity
 public class BookDetails extends BaseEntity{
 	@Column(length = 50)
 	private String title;
 	
-	@Column(length = 100)
+	@Column(length = 500)
 	private String description;
 	
 	private double price;
