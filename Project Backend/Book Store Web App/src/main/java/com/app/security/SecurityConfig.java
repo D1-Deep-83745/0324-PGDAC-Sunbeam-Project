@@ -38,36 +38,36 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain authorizeRequests(HttpSecurity http) throws Exception
 	{
-		//URL based authorization rules
+		
 		http.cors()
 		.and().
-		//disable CSRF token generation n verification
 		csrf()	.disable()
 		.exceptionHandling().authenticationEntryPoint(authEntry).
 		and().
 		authorizeRequests()
-		.antMatchers("/products/view","/user/signup","/user/signin",
+		.antMatchers("/user/signup","/user/signin",
 				"/v*/api-doc*/**","/swagger-ui/**").permitAll()
-		// only required for JS clnts (react / angular) : for the pre flight requests
 		.antMatchers(HttpMethod.OPTIONS).permitAll()
 		.antMatchers("/products/purchase/**").hasRole("CUSTOMER")
-		.antMatchers("/orders/**","/books/**","/categories/**","/user/count","/reviews/count").hasAnyRole("ADMIN" ,"SALES")
+		.antMatchers("/orders/**","/books/**","/categories/**","/user/count","/reviews/count","/author/add","/publisher/add",
+				"user/getAll","/user/{id}","/reviews/getReviews").hasAnyRole("ADMIN" ,"SALES")
+		.antMatchers("/user/RegisterSalesPerson").hasRole("ADMIN")
 		.anyRequest().authenticated()
 		.and()
-		//to tell spring sec : not to use HttpSession to store user's auth details
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		//inserting jwt filter before sec filter
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	
 		return http.build();
 	}
-	//configure AuthMgr as a spring bean
+	
 	@Bean
 	public AuthenticationManager authenticationManager
 	(AuthenticationConfiguration config) throws Exception
 	{
 		return config.getAuthenticationManager();
 	}
+	
+	
 }

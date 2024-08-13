@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -56,4 +57,7 @@ public class User extends BaseEntity {
   
   @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true )
   private List<OrderDetails> orders = new ArrayList<OrderDetails>();
+  
+  @Lob
+  private byte[] image;
 }

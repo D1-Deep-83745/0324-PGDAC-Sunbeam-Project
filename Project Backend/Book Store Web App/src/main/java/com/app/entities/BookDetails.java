@@ -21,10 +21,10 @@ import lombok.ToString;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString(exclude = {"reviews","stock"})
+
 @Entity
 public class BookDetails extends BaseEntity{
-	@Column(length = 50)
+	@Column(length = 50 ,unique = true)
 	private String title;
 	
 	@Column(length = 100)
@@ -55,4 +55,7 @@ public class BookDetails extends BaseEntity{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "admin_id")
 	private User user;
+	
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrderItem> orderItems = new ArrayList<>();
 }

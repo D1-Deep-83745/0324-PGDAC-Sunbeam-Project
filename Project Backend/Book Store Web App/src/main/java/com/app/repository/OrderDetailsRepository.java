@@ -28,4 +28,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long
 
         
 		List<OrderDetails> findTop7ByOrderByCreatedOnDesc();
+		
+		List<OrderDetails> findAllByOrderByCreatedOnDesc();
 }

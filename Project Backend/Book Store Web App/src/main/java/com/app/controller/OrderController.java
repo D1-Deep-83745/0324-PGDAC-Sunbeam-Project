@@ -23,5 +23,9 @@ public class OrderController {
 	public ResponseEntity<?> getLatest(){
 		return ResponseEntity.status(HttpStatus.OK).body(orderService.getLatestInvoices());
 	}
-
+     
+	@GetMapping("/allInvoices")
+	public ResponseEntity<?> getAllInvoices(){
+		return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllInvoices());
+	}
 }

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
+
 @Entity
 public class Publisher extends BaseEntity{	
 	@Column(length = 20)
