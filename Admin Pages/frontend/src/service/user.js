@@ -81,3 +81,14 @@ export async function getProfile() {
     });
     return response;
 }
+
+export async function getReviews() {
+    const token = sessionStorage.getItem('token');
+
+    const response = await axios.get(`${config.url}/reviews/getReviews`, {
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+    });
+    return response;
+}
