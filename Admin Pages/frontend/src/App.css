@@ -418,5 +418,160 @@ tr:hover td {
 }
 
 
+/* Container to hold the select element */
+.select-container {
+  position: relative;
+}
+
+/* Style the select element */
+#category-filter {
+  width: 50%; /* Adjust as needed */
+  height: auto; /* To ensure it doesn't limit the height of the select */
+}
+
+/* Style the dropdown list */
+#category-filter option {
+  max-height: 120px; /* Approximate height for 5 rows (adjust if needed) */
+  overflow-y: auto;
+}
+
+/* Specific styling for the dropdown list to control its height */
+#category-filter::-webkit-scrollbar {
+  width: 8px;
+}
+
+#category-filter::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+#category-filter::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.book-edit-form {
+  background-color: #1e2833;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  margin: 0 auto;
+}
+
+.book-edit-form h2 {
+  text-align: center;
+  color: #887979;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  background: #263043;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.select-container {
+  position: relative;
+}
+
+#book-category, #book-author, #book-publisher {
+  width: 100%;
+  padding: 10px;
+}
+
+.btn-outline-primary {
+  margin-top: 10px;
+  background-color: transparent;
+  border: 1px solid #2980ef;
+  color: #2980ef;
+  padding: 5px 10px;
+}
+
+.btn-outline-primary:hover {
+  background-color: #2980ef;
+  color: #ffffff;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-upload img {
+  max-width: 200px;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background-color: #214a80;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #2a5b9f;
+}
+
+
+.form-inline input.form-control {
+  width: auto; 
+  padding: 0.5em; 
+  margin-right: 0.5em; 
+  background-color: #f0f0f0;
+  border: 1px solid #ced4da;
+  border-radius: 4px; 
+}
+
+.form-inline button.btn {
+  padding: 0.5em 1em; 
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  border-radius: 4px; 
+  transition: background-color 0.3s ease; 
+}
+
+
+.form-inline button.btn:hover {
+  background-color: #0056b3; 
+}
+
+
+.form-inline {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+}
+
+
+.form-inline .form-control {
+  flex: 1; 
+  min-width: 200px; 
+}
+
+
+body.dark-mode .form-inline input.form-control {
+  background-color: #2e3b4e;
+  color: white; 
+  border: 1px solid #3e4b5e; 
+}
+
+
+.form-inline input.form-control:focus {
+  border-color: #80bdff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+}
+
+
 
 
