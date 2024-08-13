@@ -1,59 +1,52 @@
 import { useNavigate } from "react-router-dom";
-import imageSrc from '../images/facebook_profile_image.png';
+import imageSrc from "../images/facebook_profile_image.png";
 import { useState } from "react";
-import {login} from '../service/user'
+import { login } from "../service/user";
 import { toast } from "react-toastify";
 
-
-
-
-
 function Login() {
-   
-    const[email , setEmail] = useState('');
-    const[password , setPassword] = useState('');
-    
-    const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const onLogin = async () => {
-        
-       if (email.length === 0) {
-        console.log('Empty Email')
-        toast.warning('enter email')
-    }else if (password.length === 0) {
-      toast.warning('enter password')
-    }else {
+  const navigate = useNavigate();
 
-      
-      const result = await login(email, password)
-      if (result['mesg'] === 'Successful Auth!!!!') {
-            
-        const { jwt, firstName , lastName ,role ,id} = result
-         
-            sessionStorage.setItem('token', jwt)
-            sessionStorage.setItem('name', firstName+" "+lastName)
-            sessionStorage.setItem('role',role)
-            sessionStorage.setItem('id',id)
-         toast.success(`welcome ${result['firstName']} ${result['lastName']}` )
-         console.log("navigating")
-       
-         navigate('/dashboard')
-      }else {
-        toast.error('invalid email or password')
+  const onLogin = async () => {
+    if (email.length === 0) {
+      console.log("Empty Email");
+      toast.warning("enter email");
+    } else if (password.length === 0) {
+      toast.warning("enter password");
+    } else {
+      const result = await login(email, password);
+      if (result["mesg"] === "Successful Auth!!!!") {
+        const { jwt, firstName, lastName, role, id } = result;
+
+        sessionStorage.setItem("token", jwt);
+        sessionStorage.setItem("name", firstName + " " + lastName);
+        sessionStorage.setItem("role", role);
+        sessionStorage.setItem("id", id);
+        toast.success(`welcome ${result["firstName"]} ${result["lastName"]}`);
+        console.log("navigating");
+
+        navigate("/dashboard");
+      } else {
+        toast.error("invalid email or password");
       }
     }
-    }
+  };
 
   return (
     <div className="login-dark">
       <div className="form">
-      <div className="illustration ">
-          <img src={imageSrc} alt="LOGO" style={{height:"120px"}} />
+        <div className="illustration ">
+          <img src={imageSrc} alt="LOGO" style={{ height: "120px" }} />
         </div>
         <div className="form-group">
           <label htmlFor="Employee Id">Employee ID:</label>
           <input
-             onChange={(e)=>{setEmail(e.target.value)}}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             className="form-control"
             type="email"
             name="email"
@@ -63,7 +56,9 @@ function Login() {
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
-            onChange={(e)=>{setPassword(e.target.value)}}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             className="form-control"
             type="password"
             name="password"
@@ -71,12 +66,11 @@ function Login() {
           />
         </div>
         <div className="form-group">
-            <button className="btn btn-primary btn-block" 
-            onClick={onLogin}>Log In</button>
-          
+          <button className="btn btn-primary btn-block" onClick={onLogin}>
+            Log In
+          </button>
         </div>
-       
-        </div>
+      </div>
     </div>
   );
 }

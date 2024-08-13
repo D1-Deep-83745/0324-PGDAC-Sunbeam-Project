@@ -1,4 +1,0 @@
-INDEX VERSION 1.131+I:\CDAC Project\backend\.metadata\.plugins\org.eclipse.jdt.core
-3562091423.index
-1865797976.index
-2565356412.index
