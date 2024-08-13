@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Correct import
+import { Link, useNavigate } from 'react-router-dom';
+import { toast} from 'react-toastify'; // Correct import
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+import config from '../config';
 
 const Login = () => {
   const [formValues, setFormValues] = useState({
@@ -15,6 +16,7 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +36,7 @@ const Login = () => {
       setError('');
 
       try {
-        const response = await fetch('http://localhost:8080/bookstore/user/signin', {
+        const response = await fetch(`${config.url}/user/signin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -46,16 +48,16 @@ const Login = () => {
         });
 
         if (response.ok) {
-          toast('This is a test notification!');
           const data = await response.json();
+          console.log(data.userId);
           sessionStorage.setItem('token', data.jwt);
           sessionStorage.setItem('firstname', data.firstName);
-          sessionStorage.setItem('lastname', data.lastName);
-          toast.success('Login successful!');
+          sessionStorage.setItem('userId', data.userId);
+          toast.success(`Welcome ${data.firstName} to Grantha-Verse`);
+          sessionStorage.setItem('isLoggedIn', true);
           navigate(`/`);
         } else {
-          const errorText = await response.text();
-          toast.error(`Login failed: ${errorText}`);
+          toast.error(`Login failed , please retry`);
         }
       } catch (error) {
         toast.error('An error occurred. Please try again.');
@@ -84,7 +86,7 @@ const Login = () => {
     >
       <Container className="mt-5 p-4" style={{ maxWidth: '500px', backgroundColor: 'rgba(255, 255, 255, 0.9)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
         <h1 style={{ fontFamily: 'Georgia, serif', textAlign: 'center', marginBottom: '20px', color: '#343a40' }}>User Login</h1>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} >
           <Form.Group className="mb-3" controlId="username">
             <Form.Label>User Id</Form.Label>
             <Form.Control
@@ -116,11 +118,10 @@ const Login = () => {
           
           {error && <div className="alert alert-danger">{error}</div>}
 
-          <Button type="submit" className="btn-primary" style={{ width: '100%', padding: '10px' }}>Login</Button>
-          <p>Not registered yet? <a href="/register">Register</a></p>
+          <Button onClick={handleSubmit} type="submit" className="btn-primary" style={{ width: '100%', padding: '10px' }}>Login</Button>
+          <Link to="/register"><p>Not registered yet? Register</p></Link>   
         </Form>
       </Container>
-      <ToastContainer /> {/* Ensure ToastContainer is correctly imported and used */}
     </div>
   );
 };
