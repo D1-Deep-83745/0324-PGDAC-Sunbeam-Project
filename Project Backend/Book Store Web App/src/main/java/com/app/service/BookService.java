@@ -1,7 +1,10 @@
 package com.app.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.BookChartData;
 import com.app.dto.BookDetailsDTO;
@@ -22,13 +25,15 @@ public interface BookService {
 
 	 List<BookDetails> findByCategory(Category categoryName);
 
-	 List<BookDetailsDTO> getAllBooks(); 
+	 List<BookDetailsDTO> getAllBooks() throws IOException; 
 	 
 	 void deleteBook(Long id);
 	 
-     Optional<BookDetailsDTO> getBookById(Long id);
+     BookDetailsDTO getBookById(Long id) throws IOException;
 		   
-     String updateBook(Long id, BookRequestDTO bookDetails);
+     String updateBook(Long id, BookRequestDTO bookDetails , MultipartFile file) throws IOException ;
      
-     String addBook(BookRequestDTO newBook);
+     String addBook(BookRequestDTO newBook , MultipartFile file) throws IOException;
+     
+      BookDetailsDTO getBookByTitle(String title) throws IOException;
 }

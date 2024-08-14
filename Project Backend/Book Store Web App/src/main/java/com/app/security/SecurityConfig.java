@@ -15,22 +15,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity//to enable spring sec frmwork support
-@Configuration //to tell SC , this is config class containing @Bean methods
+@EnableWebSecurity
+@Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//To enable method level authorization support : pre n post authorization
 public class SecurityConfig {
-	//dep : pwd encoder
+	
 	
 	  @Bean
 	    public PasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
 	    }
 	 
-	//dep : custom jwt auth filter
+	
 	@Autowired
 	private JwtAuthenticationFilter jwtFilter;
-	//dep : custom auth entry point
+	
 	@Autowired
 	private CustomAuthenticationEntryPoint authEntry;
 	
@@ -46,9 +45,9 @@ public class SecurityConfig {
 		and().
 		authorizeRequests()
 		.antMatchers("/user/signup","/user/signin",
-				"/v*/api-doc*/**","/swagger-ui/**").permitAll()
+				"/v*/api-doc*/**","/swagger-ui/**","/books/list","/categories/listAll","/books/{id}","/reviews/book/{id}").permitAll()
 		.antMatchers(HttpMethod.OPTIONS).permitAll()
-		.antMatchers("/products/purchase/**").hasRole("CUSTOMER")
+		.antMatchers("/address/user/{id}","/orders/placeOrder/{id}","/user/profile").hasRole("CUSTOMER")
 		.antMatchers("/orders/**","/books/**","/categories/**","/user/count","/reviews/count","/author/add","/publisher/add",
 				"user/getAll","/user/{id}","/reviews/getReviews").hasAnyRole("ADMIN" ,"SALES")
 		.antMatchers("/user/RegisterSalesPerson").hasRole("ADMIN")

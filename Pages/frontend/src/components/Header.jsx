@@ -1,58 +1,121 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Navbar, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-//import { text } from '@fortawesome/fontawesome-svg-core';
-import { useCart } from '../pages/cart';
+import axios from 'axios';
+import config from '../config'; // Ensure this is the correct path to your config file
+import { toast } from 'react-toastify';
+
 function Header() {
-  
+  const [query, setQuery] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    setIsLoggedIn(!!token); // Update isLoggedIn based on token presence
+  }, []);
+
+  const handleSearch = async (event) => {
+    event.preventDefault(); // Prevent form submission and page refresh
+    try {
+      const response = await axios.get(`${config.url}/books/searchByTitle`, {
+        params: { title: query }
+      });
+      const book = response.data;
+      if (book) {
+        navigate(`/books/${book.id}`); // Navigate to the book detail page using the ID
+      } else {
+        toast.error('Book not found');
+      }
+    } catch (err) {
+      console.error('Error searching book', err);
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('firstname');
+    sessionStorage.removeItem('lastname');
+    sessionStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false); // Update state to reflect logout
+    toast.success('Logged out successfully');
+    navigate('/'); // Redirect to the home page or login page
+  };
+
+  const onCart = () => {
+    if (isLoggedIn) {
+      navigate("/cart");
+    } else {
+      toast.info("Please login first");
+      navigate("/login");
+    }
+  };
+
+  const onWishlist = () => {
+    if (isLoggedIn) {
+      navigate("/wishlist");
+    } else {
+      toast.info("Please login first");
+      navigate("/login");
+    }
+  };
+
+  const handleProfile=()=>{
+    navigate("/user/profile");
+  }
 
   return (
     <div>
-    
-     
-      <Navbar className="navbar navbar-expand-lg navbar-light bg-light w-100 fixed-top">
-        <div className="container-fluid py-2">
-          <a className="navbar-brand" href="/"><img height={30} width={200} src="/images/MyLogo.png" alt="" /></a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <form className="d-flex mx-auto my-2 my-lg-0 w-50">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn test-white bg-success" type="submit"><bsss>Search</bsss></button>
-            </form>
-            <div className="d-flex">
-             <Link to="/login" className="btn btn-outline-primary me-2"><FontAwesomeIcon icon={faUser} /> Login</Link>
-            <Link to="/wishlist" className="btn btn-outline-secondary me-2"><FontAwesomeIcon icon={faHeart} /></Link>
-            <Link to="/cart" className="btn btn-outline-danger"><FontAwesomeIcon icon={faShoppingCart} /></Link>
-            </div>
+      <Navbar bg="light" expand="lg" fixed="top">
+        <Navbar.Brand as={Link} to="/">
+          <img
+            src="/images/MyLogo.png"
+            alt="Logo"
+            style={{ maxHeight: '30px', width: 'auto' }}
+          />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarNav" />
+        <Navbar.Collapse id="navbarNav">
+          <Form className="d-flex mx-auto my-2 my-lg-0 w-50" onSubmit={handleSearch}>
+            <Form.Control
+              type="search"
+              placeholder="Search by Title..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <Button type="submit" variant="success" className="ms-1">
+              Search
+            </Button>
+          </Form>
+          <div className="d-flex align-items-center">
+            {isLoggedIn ? (
+              <>
+                <Button onClick={handleProfile} variant="outline-secondary" className="me-2">
+                  <FontAwesomeIcon icon={faUser} /> Edit Profile
+                </Button>
+                <Button onClick={handleLogout} variant="outline-primary" className="me-2">
+                  <FontAwesomeIcon icon={faUser} /> Logout
+                </Button>
+              </>
+            ) : (
+              <Button as={Link} to="/login" variant="outline-primary" className="me-2">
+                <FontAwesomeIcon icon={faUser} /> Login
+              </Button>
+            )}
+            <Button onClick={onWishlist} variant="outline-secondary" className="me-2">
+              <FontAwesomeIcon icon={faHeart} />
+            </Button>
+            <Button onClick={onCart} variant="outline-danger">
+              <FontAwesomeIcon icon={faShoppingCart} />
+            </Button>
           </div>
-        </div>
+        </Navbar.Collapse>
       </Navbar>
-
-      <div style={{ marginTop: '80px' }}></div>
-      
-      {/* Second Navbar */}
-      <Navbar className="mt navbar navbar-expand-lg navbar-light bg-info w-100 ">
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="w-100 justify-content-around">
-          <Nav.Link href="/category1"><b>New-Release</b></Nav.Link>
-          <Nav.Link href="/category2"><b>Fiction</b></Nav.Link>
-          <Nav.Link href="/category3"><b>Non-Fiction</b></Nav.Link>
-          <Nav.Link href="/category4"><b>Childrens</b></Nav.Link>
-          <Nav.Link href="/category5"><b>Novels</b></Nav.Link>
-          <Nav.Link href="/category6"><b>Travel</b></Nav.Link>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-
     </div>
-
-    
   );
 }
 
-export default Header;
+export default Header

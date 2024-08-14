@@ -1,9 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Slider from '../components/MyCarousel';
-import Header from '../components/Header';
+import Header from '../components/header';
 import BookListing from '../components/Booklisting';
 import Footer from '../components/footer';
+import HeaderCategory from '../components/HeaderCategory';
 
 
 const slides = [
@@ -19,6 +20,7 @@ export function Home() {
   return (
    <div>
     <Header />
+    <HeaderCategory/>
     <br />
     <Slider slides={slides} />
     <br />

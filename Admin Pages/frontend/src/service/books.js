@@ -82,21 +82,14 @@ export async function getTableData(){
     return response
  }
 
- export async function updateBook(id, title, description, price, publishDate, categoryId, authorId, publisherId) {
+ export async function updateBook(id,formData) {
     const token = sessionStorage.getItem('token');
-    const body = {
-       title: title,
-       description:description,
-       price: price,
-       publishDate:publishDate,
-        categoryId: categoryId || null,
-        authorId: authorId || null,
-        publisherId: publisherId || null,
-    };
+    
    
-    const response = await axios.put(`${config.url}/books/${id}`, body, {
+    const response = await axios.put(`${config.url}/books/${id}`, formData, {
         headers: {
             Authorization: "Bearer " + token,
+            'Content-Type': 'multipart/form-data',
         },
     });
     return response;
@@ -146,24 +139,18 @@ export async function addPublisher(publisherName) {
     return response;
 }
 
-export async function addBook(title, description, price, publishDate, categoryId,authorId,publisherId) {
+
+
+export async function addBook(formData) {
     const token = sessionStorage.getItem('token');
-    const body = {
-        title:title,
-        description:description,
-	    price:price,
-	   publishDate:publishDate,
-	   categoryId:categoryId,
-	   authorId:authorId,
-	   publisherId:publisherId,
-       userId:sessionStorage.getItem('id')
-    };
-   
-    const response = await axios.post(`${config.url}/books/add`, body, {
+    
+    const response = await axios.post(`${config.url}/books/add`, formData, {
         headers: {
             Authorization: "Bearer " + token,
+            'Content-Type': 'multipart/form-data',
         },
     });
+
     return response;
 }
 

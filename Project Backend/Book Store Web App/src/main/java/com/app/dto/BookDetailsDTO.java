@@ -20,4 +20,5 @@ public class BookDetailsDTO {
     private String categoryName;
     private String authorName;
     private String publisherName;
+    private String image;
 }

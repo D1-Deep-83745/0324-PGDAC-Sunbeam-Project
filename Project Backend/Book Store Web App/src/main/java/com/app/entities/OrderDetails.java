@@ -27,10 +27,10 @@ public class OrderDetails extends BaseEntity {
    @JoinColumn(name = "user_id")
    private User user;
    
-   @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
-   private List<OrderItem> itemList = new ArrayList<OrderItem>();
+   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<OrderItem> itemList = new ArrayList<>();
    
-   @OneToOne(mappedBy = "orders" ,cascade = CascadeType.ALL )
+   @OneToOne(mappedBy = "orderDetails", cascade = CascadeType.ALL)
    private Transaction transaction;
    
    public double getTotalAmount() {

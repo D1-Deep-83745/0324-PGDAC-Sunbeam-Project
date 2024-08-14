@@ -50,7 +50,7 @@ const Register = () => {
             lastName: formValues.lastName,
             email: formValues.email,
             password: formValues.password,
-            role: "", // Assuming this is optional or handled in backend
+            role: "CUSTOMER", 
           }),
         });
 
@@ -170,7 +170,6 @@ const Register = () => {
           <Button onClick={goToLogin} variant="secondary" className="btn-secondary mt-2" style={{ width: '100%' }}>Already a user? Login</Button>
         </Form>
       </Container>
-      <ToastContainer /> {/* Add ToastContainer for toasts */}
     </div>
   );
 };

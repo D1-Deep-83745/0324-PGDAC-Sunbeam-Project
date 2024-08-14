@@ -58,6 +58,9 @@ public class User extends BaseEntity {
   @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true )
   private List<OrderDetails> orders = new ArrayList<OrderDetails>();
   
+  @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true )
+  private List<Address> address=new ArrayList<Address>();
+  
   @Lob
   private byte[] image;
 }

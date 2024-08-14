@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.BookChartData;
 import com.app.dto.BookDetailsDTO;
@@ -63,6 +65,10 @@ public class BookServiceImpl implements BookService {
     
     @Autowired
     private ModelMapper mapper;
+    
+    
+    @Autowired
+    private BookImageHandlingService imgHandlingService;
     
     @Override
     public int totalBooks() {        
@@ -121,16 +127,31 @@ public class BookServiceImpl implements BookService {
     }
      
     @Override
-    public List<BookDetailsDTO> getAllBooks() {
+    public List<BookDetailsDTO> getAllBooks() throws IOException{
         List<BookDetails> books = bookRepo.findAll();
-        return books.stream()
-                    .map(this::convertToDTO)
-                    .collect(Collectors.toList());
+        List<BookDetailsDTO> dto = new ArrayList<BookDetailsDTO>();
+        
+        for(BookDetails b : books) {
+        	BookDetailsDTO bdto = this.convertToDTO(b);
+        	dto.add(bdto);
+        }
+        return dto;
     }
-
-    private BookDetailsDTO convertToDTO(BookDetails book) {
+     
+    
+    @Override
+   	public BookDetailsDTO getBookByTitle(String title)throws IOException {
+   	    BookDetails book = bookRepo.findByTitle(title).orElse(null);
+   	    return  this.convertToDTO(book);
+   	}
+    
+    
+    
+    
+    private BookDetailsDTO convertToDTO(BookDetails book) throws IOException {
         if (book == null) {
-            throw new IllegalArgumentException("BookDetails cannot be null");
+            
+            return new BookDetailsDTO(); 
         }
 
         BookDetailsDTO dto = new BookDetailsDTO();
@@ -143,7 +164,11 @@ public class BookServiceImpl implements BookService {
         dto.setCategoryName(book.getBookCategory() != null ? book.getBookCategory().getCategoryName() : "Unknown");
         dto.setAuthorName(book.getAuthor() != null ? book.getAuthor().getAuthorName() : "Unknown");
         dto.setPublisherName(book.getPublication() != null ? book.getPublication().getPublisherName() : "Unknown");
+
         
+        String image = imgHandlingService.serveImage(book.getId());
+        dto.setImage(image != null ? image : "default-image-path"); 
+
         return dto;
     }
 
@@ -153,54 +178,47 @@ public class BookServiceImpl implements BookService {
     }
     
     @Override
-    public Optional<BookDetailsDTO> getBookById(Long id) {
-        Optional<BookDetails> bookOptional = bookRepo.findById(id);
-        if (bookOptional.isPresent()) {
-            BookDetails book = bookOptional.get();
-            return Optional.of(convertToDTO(book));
-        } else {
-            return Optional.empty();
-        }
-    } 
+    public BookDetailsDTO getBookById(Long id) throws IOException {
+        BookDetails book = bookRepo.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookDetailsDTO bookdto = mapper.map(book, BookDetailsDTO.class);
+        bookdto.setImage(imgHandlingService.serveImage(id)); 
+        return bookdto;
+    }
     
     @Override
-    public String updateBook(Long id, BookRequestDTO bookDetails) {
-        return bookRepo.findById(id).map(existingBook -> {
-            
-            // Update the book fields
-            existingBook.setTitle(bookDetails.getTitle());
-            existingBook.setDescription(bookDetails.getDescription());
-            existingBook.setPrice(bookDetails.getPrice());
-            existingBook.setPublishDate(bookDetails.getPublishDate());
+    public String updateBook(Long id, BookRequestDTO bookDetails, MultipartFile file) throws IOException {
+        BookDetails book = bookRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+        book.setTitle(bookDetails.getTitle());
+        book.setDescription(bookDetails.getDescription());
+        book.setPrice(bookDetails.getPrice());
+        book.setPublishDate(bookDetails.getPublishDate());
+        if (bookDetails.getAuthorId() != null) {
+            authorRepository.findById(bookDetails.getAuthorId())
+                    .ifPresent(book::setAuthor);
+        }
+        if (bookDetails.getCategoryId() != null) {
+            categoryRepository.findById(bookDetails.getCategoryId())
+                    .ifPresent(book::setBookCategory);
+        }
+        if (bookDetails.getPublisherId() != null) {
+            publisherRepository.findById(bookDetails.getPublisherId())
+                    .ifPresent(book::setPublication);
+        }
 
-            // Update the author if provided
-            if (bookDetails.getAuthorId() != null) {
-                authorRepository.findById(bookDetails.getAuthorId())
-                    .ifPresent(existingBook::setAuthor);
-            }
-
-            // Update the category if provided
-            if (bookDetails.getCategoryId() != null) {
-                categoryRepository.findById(bookDetails.getCategoryId())
-                    .ifPresent(existingBook::setBookCategory);
-            }
-
-            // Update the publisher if provided
-            if (bookDetails.getPublisherId() != null) {
-                publisherRepository.findById(bookDetails.getPublisherId())
-                    .ifPresent(existingBook::setPublication);
-            }
-
-            // Save the updated book
-            bookRepo.save(existingBook);
-
-            return "Data updated successfully";
-            
-        }).orElse("Book not found with id: " + id);
+        if (file != null && !file.isEmpty()) {
+            imgHandlingService.uploadImage(book, file);
+        }
+        bookRepo.save(book);
+        return "Updation Successful";
     }
 
+
+  
+    
+    
     @Override
-    public String addBook(BookRequestDTO newBook) {
+    public String addBook(BookRequestDTO newBook , MultipartFile file) throws IOException {
         Author author = authorRepository.findById(newBook.getAuthorId()).orElse(null);
         Publisher publisher = publisherRepository.findById(newBook.getPublisherId()).orElse(null);
         Category category = categoryRepository.findById(newBook.getCategoryId()).orElse(null);
@@ -226,11 +244,14 @@ public class BookServiceImpl implements BookService {
         book.setBookCategory(category);
         book.setPublication(publisher);
         book.setUser(user);
+        imgHandlingService.uploadImage(book, file);
         bookRepo.save(book);
         return "Book added Successfully!";
     }
 
+	
 
+   
 
 
 }

@@ -58,4 +58,6 @@ public class BookDetails extends BaseEntity{
 	
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> orderItems = new ArrayList<>();
+	
+	private String imagePath;
 }
