@@ -20,8 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// ret list of granted authorities
-		// GrantedAuthority : i/f -<--- SimpleGrantedAuthority(String role)
+		
 		return List.of(new SimpleGrantedAuthority
 				(user.getUserRole().name()));
 	}

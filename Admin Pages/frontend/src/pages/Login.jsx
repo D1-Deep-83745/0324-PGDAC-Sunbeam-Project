@@ -23,8 +23,8 @@ function Login() {
     }else if (password.length === 0) {
       toast.warning('enter password')
     }else {
-
       
+      try{
       const result = await login(email, password)
       if (result['mesg'] === 'Successful Auth!!!!') {
             
@@ -41,6 +41,10 @@ function Login() {
       }else {
         toast.error('invalid email or password')
       }
+    }
+    catch{
+       toast.error('invalid login') 
+    }
     }
     }
 

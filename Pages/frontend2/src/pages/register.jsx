@@ -50,7 +50,7 @@ const Register = () => {
             lastName: formValues.lastName,
             email: formValues.email,
             password: formValues.password,
-            role: "", // Assuming this is optional or handled in backend
+            role: "CUSTOMER", 
           }),
         });
 

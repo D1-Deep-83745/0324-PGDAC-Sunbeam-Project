@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { Container, Row, Col, Card, Button, Form, Table } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+=======
+import { Container, Row, Col, Card, Button, Form, Table, Modal } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../components/header';
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import config from '../config';
@@ -9,15 +15,23 @@ import config from '../config';
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const { cartItems } = location.state || {};
+=======
+  const { cartItems: initialCartItems } = location.state || {};
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
 
   const userId = sessionStorage.getItem("userId");
   const token = sessionStorage.getItem('token');
 
+<<<<<<< HEAD
   if (!cartItems) {
     return <div>Your order is confirmed</div>;
   }
 
+=======
+  const [cartItems, setCartItems] = useState(initialCartItems || []);
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isAddingAddress, setIsAddingAddress] = useState(false);
@@ -28,16 +42,31 @@ const CheckoutPage = () => {
     zipCode: '',
     country: ''
   });
+<<<<<<< HEAD
 
   useEffect(() => {
     console.log('Fetching addresses for user ID:', userId);
     
+=======
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [generatedOtp, setGeneratedOtp] = useState('');
+
+  useEffect(() => {
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
     const fetchAddresses = async () => {
       try {
         const response = await axios.get(`${config.url}/address/user/${userId}`, {
           headers: {
+<<<<<<< HEAD
             Authorization: `Bearer ${token}`
           }
+=======
+            Authorization: `Bearer ${token}`,
+          },
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
         });
         setAddresses(response.data);
       } catch (err) {
@@ -87,9 +116,64 @@ const CheckoutPage = () => {
     }
   };
 
+<<<<<<< HEAD
   const notify = () => {
     toast.success("Order Successfully Placed...");
     navigate("/");
+=======
+  const handleShowConfirmModal = () => setShowConfirmModal(true);
+  const handleCloseConfirmModal = () => setShowConfirmModal(false);
+  const handleShowOtpModal = () => setShowOtpModal(true);
+  const handleCloseOtpModal = () => setShowOtpModal(false);
+
+  const handleConfirmOrder = async () => {
+    try {
+      setGeneratedOtp(); 
+      handleShowOtpModal();
+    } catch (err) {
+      console.error('Error generating OTP', err);
+      toast.error('Failed to generate OTP');
+    } finally {
+      handleCloseConfirmModal();
+    }
+  };
+
+  const handleOtpChange = (event) => {
+    setOtp(event.target.value);
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      if (otp) {
+        const orderRequest = {
+          amount: getTotalPrice().toFixed(2),
+          cartItems,
+          selectedAddressId: selectedAddress,
+          paymentMethod: selectedPaymentMethod
+        };
+        const response = await axios.post(`${config.url}/orders/placeOrder/${userId}`, orderRequest, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (response.status === 200) {
+          toast.success("Order Successfully Placed...");
+          localStorage.clear()
+          navigate("/");
+        } else {
+          toast.error('Invalid OTP');
+        }
+      } else {
+        toast.error('Invalid OTP');
+      }
+    } catch (err) {
+      console.error('Error placing order', err);
+      toast.error('Failed to place order');
+    } finally {
+      handleCloseOtpModal();
+    }
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   };
 
   return (
@@ -139,7 +223,11 @@ const CheckoutPage = () => {
             required
           >
             <option value="">Choose...</option>
+<<<<<<< HEAD
             {addresses.map((address, index) => (
+=======
+            {addresses.map((address) => (
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
               <option key={address.id} value={address.id}>
                 {address.street}, {address.city}, {address.state}, {address.zipCode}, {address.country}
               </option>
@@ -223,13 +311,23 @@ const CheckoutPage = () => {
           <Form>
             <Form.Group controlId="paymentMethod">
               <Form.Label>Select Payment Method</Form.Label>
+<<<<<<< HEAD
               <Form.Control as="select" required>
+=======
+              <Form.Control
+                as="select"
+                value={selectedPaymentMethod}
+                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                required
+              >
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
                 <option value="">Choose...</option>
                 <option value="CREDIT_CARD">CREDIT_CARD</option>
                 <option value="DEBIT_CARD">DEBIT_CARD</option>
                 <option value="PAYPAL">PAYPAL</option>
                 <option value="CASH">CASH</option>
                 <option value="BANK_TRANSFER">BANK_TRANSFER</option>
+<<<<<<< HEAD
                 <option value="UPI">UPI</option>
                 <option value="COD">COD</option>
               </Form.Control>
@@ -240,6 +338,59 @@ const CheckoutPage = () => {
           </Form>
         </Card.Body>
       </Card>
+=======
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Card.Body>
+      </Card>
+      
+      <Button variant="primary" onClick={handleShowConfirmModal} disabled={!selectedAddress || !selectedPaymentMethod}>
+        Confirm Order
+      </Button>
+
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Order</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to place this order?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmOrder}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showOtpModal} onHide={handleCloseOtpModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Enter OTP</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="otp">
+            <Form.Label>OTP</Form.Label>
+            <Form.Control
+              type="text"
+              value={otp}
+              onChange={handleOtpChange}
+              required
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseOtpModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleVerifyOtp}>
+            Verify and Place Order
+          </Button>
+        </Modal.Footer>
+      </Modal>
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
     </Container>
   );
 };

@@ -54,6 +54,23 @@ public class ReviewServiceImpl implements ReviewService {
 	                  })
 	                  .collect(Collectors.toList());
 	}
-
+     
+	@Override
+    public List<ReviewDto> getReviewsByBookId(Long bookId) {
+        List<Review> reviews = reviewRepo.findByBookId(bookId);
+        return reviews.stream()
+                      .map(this::convertToDTO)
+                      .collect(Collectors.toList());
+    } 
+	
+	  private ReviewDto convertToDTO(Review review) {
+	        ReviewDto dto = new ReviewDto();
+	        dto.setId(review.getId());
+	        dto.setUserId(review.getUser().getId());
+	        dto.setBookId(review.getBook().getId());
+	        dto.setRating(review.getRating());
+	        dto.setComment(review.getComment());  
+	        return dto;
+	    }
 
 }

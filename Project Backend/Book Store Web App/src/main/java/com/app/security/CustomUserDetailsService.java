@@ -19,14 +19,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		// invoke dao's method
+		
 		User user = userRepo.findByEmail(email)
 				.orElseThrow(() -> 
 				new UsernameNotFoundException("Email not found !!!!!"));
-		//=> user email exists - user : persistent
-		/*
-		 * In case of email found -- this method has to ret UserDetails object filled with details lifted from DB
-		 */
+		
 		return new CustomUserDetails(user);
 	}
 

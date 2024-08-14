@@ -1,12 +1,12 @@
 import BookListing from "../components/Booklisting";
-import Header from "../components/Header";
+import Header from "../components/header";
 import Footer from "../components/footer";
 
-export function Fiction(){
+export function Childrens(){
     return (
         <>
         <Header/>
-        <h1><center>Fiction</center> </h1>
+        <h1><center>Category-4 Page</center> </h1>
         <br />
         <br />
         <BookListing/>
@@ -15,4 +15,4 @@ export function Fiction(){
     );
 }
 
-export default Fiction;
+export default Childrens;

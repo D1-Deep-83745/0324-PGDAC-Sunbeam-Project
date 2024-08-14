@@ -41,7 +41,7 @@ function InventoryTable({ inventoryData, onAddItem, onUpdateItem }) {
     const handleAddClick = () => {
         onAddItem(newItem);
         setNewItem({ available_quantity: '', location: '', title: '' });
-        setShowAddForm(false); // Hide form after adding item
+        setShowAddForm(false); 
     };
 
     return (

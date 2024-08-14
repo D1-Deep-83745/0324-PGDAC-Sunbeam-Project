@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+<<<<<<< HEAD
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+=======
+import Header from '../components/header';
+import Footer from '../components/footer';
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
 import { useNavigate } from 'react-router-dom';
 import HeaderCategory from '../components/HeaderCategory';
 
@@ -51,6 +56,15 @@ const Wishlist = () => {
     navigate('/cart');
   };
 
+<<<<<<< HEAD
+=======
+  const getImageSrc = (image) => {
+    // Adding the base64 prefix if it's not already present
+    const prefix = 'data:image/jpeg;base64,';
+    return image.startsWith(prefix) ? image : `${prefix}${image}`;
+  };
+
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   return (
     <div>
       <Header />
@@ -62,11 +76,19 @@ const Wishlist = () => {
             wishlistItems.map((item) => (
               <Col key={item.id} xs={6} md={4} lg={2} className="mb-4">
                 <Card>
+<<<<<<< HEAD
                   <Card.Img variant="top" src={"/images/book6.jpg"} />
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>
                       <h4>Price: ₹{item.price.toFixed(2)}</h4>
+=======
+                  <Card.Img variant="top" src={getImageSrc(item.image)} alt={item.title} />
+                  <Card.Body>
+                    <Card.Title>{item.title}</Card.Title>
+                    <Card.Text>
+                      <h4>Price: ₹{item.price?.toFixed(2) || 'N/A'}</h4>
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
                       <Button style={{ marginRight: '20px' }} variant="primary" onClick={() => handleAddToCart(item)}>
                         Add to Cart
                       </Button>

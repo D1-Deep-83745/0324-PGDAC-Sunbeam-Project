@@ -1,9 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Row, Col, Image, Button, Form, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+<<<<<<< HEAD
 import Header from '../components/Header';
 import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../components/Footer';
+=======
+import Header from '../components/header';
+import { useNavigate, useParams } from 'react-router-dom';
+import Footer from '../components/footer';
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
 import { toast } from 'react-toastify';
 import BookListing from '../components/Booklisting';
 import HeaderCategory from '../components/HeaderCategory';
@@ -18,7 +24,10 @@ const Bookdetail = () => {
   const quantityRef = useRef(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +51,7 @@ const Bookdetail = () => {
         setReviews(reviewsData);
 
         const token = sessionStorage.getItem('token');
+<<<<<<< HEAD
         if(token){
           setIsLoggedIn(true);
         }
@@ -49,6 +59,15 @@ const Bookdetail = () => {
           setIsLoggedIn(false);
         }
       } catch (err) {
+=======
+        if (token) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (err) {
+        setError(err.message);
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
       }
     };
 
@@ -82,7 +101,10 @@ const Bookdetail = () => {
       navigate("/login");
     }
   };
+<<<<<<< HEAD
   
+=======
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
 
   const handleAddToWishlist = () => {
     if (isLoggedIn) {
@@ -107,6 +129,14 @@ const Bookdetail = () => {
     }
   };
 
+<<<<<<< HEAD
+=======
+  // Function to convert base64 string to data URL
+  const getImageSrc = (base64String) => {
+    return `data:image/jpeg;base64,${base64String}`;
+  };
+
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!book) return <Alert variant="warning">Book not found</Alert>;
 
@@ -117,7 +147,16 @@ const Bookdetail = () => {
       <Container className="mt-4">
         <Row>
           <Col md={6} className="text-center">
+<<<<<<< HEAD
             <Image src={"/images/book6.jpg"} alt={book.title} className="img-fluid" style={{ maxHeight: '400px', objectFit: 'cover' }} />
+=======
+            <Image
+              src={book.image ? getImageSrc(book.image) : "/images/book6.jpg"}
+              alt={book.title}
+              className="img-fluid"
+              style={{ maxHeight: '400px', objectFit: 'cover' }}
+            />
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
           </Col>
           <Col md={6}>
             <h2>{book.title}</h2>
@@ -138,6 +177,7 @@ const Bookdetail = () => {
         <Row>
           <Col></Col>
           <Col md={4}>
+<<<<<<< HEAD
   <ul>
     {reviews.length > 0 ? (
       reviews.map((review, index) => (
@@ -153,6 +193,21 @@ const Bookdetail = () => {
 </Col>
 
 
+=======
+            <ul>
+              {reviews.length > 0 ? (
+                reviews.map((review, index) => (
+                  <li key={review.id || index}>
+                    <p><strong>Rating :</strong> {review.rating !== null && review.rating !== undefined ? review.rating : 'N/A'}</p>
+                    <p><strong>Review :</strong> {review.comment && review.comment.trim() !== '' ? review.comment : 'N/A'}</p>
+                  </li>
+                ))
+              ) : (
+                <p>No reviews available.</p>
+              )}
+            </ul>
+          </Col>
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
           <Col md={6}>
             <p><strong>Written by : </strong> {book.authorName || 'N/A'}</p>
             <p><strong>Published by : </strong> {book.publisherName || 'N/A'}</p>

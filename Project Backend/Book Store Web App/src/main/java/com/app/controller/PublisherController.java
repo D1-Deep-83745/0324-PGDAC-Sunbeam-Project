@@ -14,7 +14,7 @@ import com.app.service.PublisherService;
 
 @RestController
 @RequestMapping("/publisher")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000" ,"http://localhost:3001"})
 public class PublisherController {
 	
 	  @Autowired

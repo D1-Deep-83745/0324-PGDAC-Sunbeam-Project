@@ -3,6 +3,7 @@ import { useParams , useNavigate } from 'react-router-dom';
 import { Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../config';
+<<<<<<< HEAD
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import HeaderCategory from '../components/HeaderCategory';
@@ -10,6 +11,15 @@ import HeaderCategory from '../components/HeaderCategory';
 const CategoryPage = () => {
   const { categoryName } = useParams(); // Get categoryName from URL
   console.log("Category Name:", categoryName); // Debugging line
+=======
+import Header from '../components/header'
+import Footer from '../components/footer';
+import HeaderCategory from '../components/HeaderCategory';
+
+const CategoryPage = () => {
+  const { categoryName } = useParams(); 
+  console.log("Category Name:", categoryName); 
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
   const navigate=useNavigate();

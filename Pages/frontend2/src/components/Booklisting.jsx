@@ -97,7 +97,15 @@ const BookListing = () => {
           sortedBooks.map((book) => (
             <Col key={book.id} xs={6} sm={4} md={4} lg={2} className="mb-3">
               <Card onClick={() => handleBookClick(book.id)} style={{ cursor: 'pointer' }}>
+<<<<<<< HEAD
                 <Card.Img variant="top" src={"/images/book5.jpg"} />
+=======
+                <Card.Img
+                  variant="top"
+                  src={`data:image/jpeg;base64,${book.image}`}
+                  alt={book.title}
+                />
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
                 <Card.Body>
                   <Card.Title>{book.title}</Card.Title>
                   <Card.Text>₹{book.price}</Card.Text>
@@ -114,3 +122,5 @@ const BookListing = () => {
 };
 
 export default BookListing;
+
+

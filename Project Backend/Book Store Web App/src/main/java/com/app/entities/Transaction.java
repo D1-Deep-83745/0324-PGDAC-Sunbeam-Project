@@ -27,8 +27,8 @@ public class Transaction extends BaseEntity {
 	private User user;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id") 
-	private OrderDetails orders;
+	@JoinColumn(name = "order_id", unique = true)
+	private OrderDetails orderDetails;
 	
 	private double amount;
 	

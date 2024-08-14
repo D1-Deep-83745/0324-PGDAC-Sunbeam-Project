@@ -52,7 +52,11 @@ const Login = () => {
           console.log(data.userId);
           sessionStorage.setItem('token', data.jwt);
           sessionStorage.setItem('firstname', data.firstName);
+<<<<<<< HEAD
           sessionStorage.setItem('userId', data.Userid);
+=======
+          sessionStorage.setItem('userId', data.id);
+>>>>>>> 8afcff75820f78e2e2cdd3b578ad364e275e1480
           toast.success(`Welcome ${data.firstName} to Grantha-Verse`);
           sessionStorage.setItem('isLoggedIn', true);
           navigate(`/`);

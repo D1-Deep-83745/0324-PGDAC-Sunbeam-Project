@@ -15,7 +15,7 @@ import com.app.service.AuthorService;
 
 @RestController
 @RequestMapping("/author")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000" ,"http://localhost:3001"})
 public class AuthorController {
 	   
 	  @Autowired

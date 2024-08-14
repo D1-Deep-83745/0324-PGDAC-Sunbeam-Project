@@ -16,8 +16,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		/* System.out.println("in commense"); */
-		// send error message : SC 401
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
 
 	}
