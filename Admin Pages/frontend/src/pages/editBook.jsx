@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 function EditBooks() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
+  const [file, setFile] = useState(null); // New state to store the selected file
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +29,21 @@ function EditBooks() {
 
   const handleSubmit = async (bookData) => {
     try {
-      const updateResult = await updateBook(id, bookData);
+      const formData = new FormData();
+      formData.append("title", bookData.title);
+      formData.append("description", bookData.description);
+      formData.append("price", bookData.price);
+      formData.append("publishDate", bookData.publishDate);
+      formData.append("categoryId", bookData.categoryId);
+      formData.append("authorId", bookData.authorId);
+      formData.append("publisherId", bookData.publisherId);
+
+     
+      if (file) {
+        formData.append("profilePicture", file); 
+      }
+
+      const updateResult = await updateBook(id, formData);
 
       if (updateResult.status === 200) {
         toast.success("Book Updated Successfully!");
@@ -42,7 +57,7 @@ function EditBooks() {
   };
 
   const handleFileChange = (file) => {
-   
+    setFile(file); // Store the file in state
   };
 
   return (
