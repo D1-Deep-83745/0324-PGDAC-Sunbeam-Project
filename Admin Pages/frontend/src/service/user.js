@@ -52,7 +52,6 @@ export async function blockUser(id) {
     const response = await axios.delete(`${config.url}/user/${id}`, {
         headers: {
             Authorization: "Bearer " + token,
-            'Content-Type': 'multipart/form-data',
         },
     });
     return response;
@@ -64,6 +63,7 @@ export async function updateProfile(formDataToSend){
     const response = await axios.put(`${config.url}/user/${sessionStorage.getItem('id')}`, formDataToSend, {
         headers: {
             Authorization: "Bearer " + token,
+         'Content-Type': 'multipart/form-data',
         },
         
     });
@@ -81,6 +81,7 @@ export async function getProfile() {
     });
     return response;
 }
+
 
 export async function getReviews() {
     const token = sessionStorage.getItem('token');

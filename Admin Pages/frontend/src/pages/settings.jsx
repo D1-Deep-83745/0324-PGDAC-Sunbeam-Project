@@ -3,9 +3,12 @@ import Header from "../component/header";
 import { useState, useEffect } from "react";
 import { getProfile, updateProfile } from "../service/user";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Settings() {
     const [userData, setUserData] = useState(null);
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -18,7 +21,6 @@ function Settings() {
     });
 
     useEffect(() => {
-        // Fetch user profile data on component mount
         const fetchUserProfile = async () => {
             try {
                 const response = await getProfile();
@@ -45,7 +47,7 @@ function Settings() {
                 phoneNo: userData.phoneNo || '',
                 gender: userData.gender || '',
                 profilePicture: null,
-                existingProfilePicture: userData.profilePicture || '',
+                existingProfilePicture: userData.image || '', // Assuming 'image' contains Base64 string
             });
         }
     }, [userData]);
@@ -60,10 +62,14 @@ function Settings() {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setFormData((prevData) => ({
-            ...prevData,
-            profilePicture: file,
-        }));
+        if (file.size > 10 * 1024 * 1024) { 
+            toast.error("File size exceeds the 10MB limit");
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                profilePicture: file,
+            }));
+        }
     };
 
     const handleSave = async () => {
@@ -81,6 +87,8 @@ function Settings() {
             const updationResult = await updateProfile(formDataToSend);
             if (updationResult.status === 202) {
                 toast.success("Profile updated successfully");
+                navigate("/settings")
+
             } else {
                 toast.error("Failed to update profile");
             }
@@ -88,7 +96,7 @@ function Settings() {
             toast.error("Error updating profile");
         }
     };
-    
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -112,7 +120,7 @@ function Settings() {
                                             />
                                         ) : formData.existingProfilePicture ? (
                                             <img
-                                                src={formData.existingProfilePicture}
+                                                src={`data:image/png;base64,${formData.existingProfilePicture}`}
                                                 alt="Profile"
                                                 className="img-fluid rounded-circle"
                                             />

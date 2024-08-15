@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
   const onLogin = async () => {
@@ -17,20 +16,24 @@ function Login() {
     } else if (password.length === 0) {
       toast.warning("enter password");
     } else {
-      const result = await login(email, password);
-      if (result["mesg"] === "Successful Auth!!!!") {
-        const { jwt, firstName, lastName, role, id } = result;
+      try {
+        const result = await login(email, password);
+        if (result["mesg"] === "Successful Auth!!!!") {
+          const { jwt, firstName, lastName, role, id } = result;
 
-        sessionStorage.setItem("token", jwt);
-        sessionStorage.setItem("name", firstName + " " + lastName);
-        sessionStorage.setItem("role", role);
-        sessionStorage.setItem("id", id);
-        toast.success(`welcome ${result["firstName"]} ${result["lastName"]}`);
-        console.log("navigating");
+          sessionStorage.setItem("token", jwt);
+          sessionStorage.setItem("name", firstName + " " + lastName);
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("id", id);
+          toast.success(`welcome ${result["firstName"]} ${result["lastName"]}`);
+          console.log("navigating");
 
-        navigate("/dashboard");
-      } else {
-        toast.error("invalid email or password");
+          navigate("/dashboard");
+        } else {
+          toast.error("invalid email or password");
+        }
+      } catch {
+        toast.error("invalid login");
       }
     }
   };

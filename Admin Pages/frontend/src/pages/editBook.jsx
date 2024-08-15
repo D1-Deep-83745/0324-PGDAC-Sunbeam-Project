@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 function EditBooks() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadOnStartup();
@@ -22,23 +22,27 @@ function EditBooks() {
         setBook(bookResult.data);
       }
     } catch (error) {
-      toast.error("Something Went wrong...!!!");
+      toast.error("Something went wrong!");
     }
   };
 
   const handleSubmit = async (bookData) => {
     try {
-      const updateResult = await updateBook(id, bookData.title, bookData.description, bookData.price, bookData.publishDate, bookData.categoryId, bookData.authorId, bookData.publisherId);
+      const updateResult = await updateBook(id, bookData);
 
       if (updateResult.status === 200) {
-        toast.success("Book Updated Successfully...!!!");
-         navigate("/Books")
+        toast.success("Book Updated Successfully!");
+        navigate("/Books");
       } else {
-        toast.error("Something Went Wrong...!");
+        toast.error("Something went wrong!");
       }
     } catch (error) {
-      toast.error("Something Went Wrong...!");
+      toast.error("Something went wrong!");
     }
+  };
+
+  const handleFileChange = (file) => {
+   
   };
 
   return (
@@ -52,7 +56,12 @@ function EditBooks() {
           <main className="mt-4 container-fluid">
             <div className="book-edit-form">
               <h2>Edit Book Details</h2>
-              <BookForm book={book} action={"Update Book"} onsubmit={handleSubmit} />
+              <BookForm
+                book={book}
+                action={"edit"}
+                onsubmit={handleSubmit}
+                onFileChange={handleFileChange} // Pass handleFileChange function
+              />
             </div>
           </main>
         </div>

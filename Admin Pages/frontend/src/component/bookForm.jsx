@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { addAuthor, addCategory, addPublisher, getAllAuthors, getCategories, getPublishers } from "../service/books";
 import { toast } from "react-toastify";
 
-function BookForm({ book, action, onsubmit }) {
-  const [imagePreview, setImagePreview] = useState("path/to/current/image.jpg");
+function BookForm({ book, action, onsubmit, onFileChange }) {
+  const [imagePreview, setImagePreview] = useState(""); // Initially empty
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
@@ -34,86 +34,112 @@ function BookForm({ book, action, onsubmit }) {
       setSelectedAuthor(book.authorId || "");
       setSelectedCategory(book.categoryId || "");
       setSelectedPublisher(book.publisherId || "");
-      setImagePreview(book.coverImage || "path/to/current/image.jpg");
+
+      // Check if image is a base64 string or URL
+      if (book.image) {
+        setImagePreview(`data:image/jpeg;base64,${book.image}`); // Ensure proper data URI scheme
+      } else {
+        setImagePreview(""); // Default or empty if no image
+      }
     }
   }, [book]);
 
   const loadOptions = async () => {
-    const categoryResult = await getCategories();
-    if (categoryResult.status === 200) {
-      setCategories(categoryResult.data);
-    }
+    try {
+      const categoryResult = await getCategories();
+      if (categoryResult.status === 200) {
+        setCategories(categoryResult.data);
+      }
 
-    const authorResult = await getAllAuthors();
-    if (authorResult.status === 200) {
-      setAuthors(authorResult.data);
-    }
+      const authorResult = await getAllAuthors();
+      if (authorResult.status === 200) {
+        setAuthors(authorResult.data);
+      }
 
-    const publisherResult = await getPublishers();
-    if (publisherResult.status === 200) {
-      setPublishers(publisherResult.data);
+      const publisherResult = await getPublishers();
+      if (publisherResult.status === 200) {
+        setPublishers(publisherResult.data);
+      }
+    } catch (error) {
+      toast.error("Failed to load options.");
     }
   };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      onFileChange(file); 
       const reader = new FileReader();
       reader.onload = () => {
-        setImagePreview(reader.result);
+        setImagePreview(reader.result); 
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleSaveNewCategory = async () => {
-      
-    const addCategoryResult = await addCategory(newCategory)
-    
-    if(addCategoryResult.status===200){
-        toast.success("New Category Has Been added Successfully !")
-           await loadOptions();
-           setShowNewCategoryInput(false);
-          setNewCategory("");
+    try {
+      const addCategoryResult = await addCategory(newCategory);
+      if (addCategoryResult.status === 200) {
+        toast.success("New Category Has Been added Successfully!");
+        await loadOptions();
+        setShowNewCategoryInput(false);
+        setNewCategory("");
+      }
+    } catch (error) {
+      toast.error("Failed to add new category.");
     }
-   
   };
 
   const handleSaveNewAuthor = async () => {
-       const addAuthorResult=await addAuthor(newAuthor)
-       if(addAuthorResult.status===200){
-            toast.success("New Author Has Been added Successfully !")    
-            await loadOptions();
-            setShowNewAuthorInput(false);
-            setNewAuthor("");
-  }
+    try {
+      const addAuthorResult = await addAuthor(newAuthor);
+      if (addAuthorResult.status === 200) {
+        toast.success("New Author Has Been added Successfully!");
+        await loadOptions();
+        setShowNewAuthorInput(false);
+        setNewAuthor("");
+      }
+    } catch (error) {
+      toast.error("Failed to add new author.");
+    }
   };
 
   const handleSaveNewPublisher = async () => {
-          const addpublisherResult=await addPublisher(newPublisher)
-          if(addpublisherResult.status===200){
-             toast.success("New Publisher Has Been added Successfully !")
-             await loadOptions();
-             setShowNewPublisherInput(false);
-             setNewPublisher("");
-          }
+    try {
+      const addPublisherResult = await addPublisher(newPublisher);
+      if (addPublisherResult.status === 200) {
+        toast.success("New Publisher Has Been added Successfully!");
+        await loadOptions();
+        setShowNewPublisherInput(false);
+        setNewPublisher("");
+      }
+    } catch (error) {
+      toast.error("Failed to add new publisher.");
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
   
-    const bookId = book ? book.id : null;
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", desc);
+    formData.append("price", price);
+    formData.append("publishDate", publishDate);
+    formData.append("categoryId", selectedCategory);
+    formData.append("authorId", selectedAuthor);
+    formData.append("publisherId", selectedPublisher);
+    
+    
+    if (imagePreview) {
+      const fileInput = document.getElementById('book-image');
+      if (fileInput.files[0]) {
+        formData.append("profilePicture", fileInput.files[0]);
+      }
+    }
   
-    onsubmit({
-      id: bookId, 
-      title,
-      description: desc,
-      price,
-      publishDate,
-      categoryId: selectedCategory,
-      authorId: selectedAuthor,
-      publisherId: selectedPublisher,
-    });
+    onsubmit(formData);
   };
   
 
@@ -128,6 +154,7 @@ function BookForm({ book, action, onsubmit }) {
           className="form-control"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
       </div>
 
@@ -139,6 +166,7 @@ function BookForm({ book, action, onsubmit }) {
           className="form-control"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
+          required
         ></textarea>
       </div>
 
@@ -151,6 +179,7 @@ function BookForm({ book, action, onsubmit }) {
           className="form-control"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          required
         />
       </div>
 
@@ -163,6 +192,7 @@ function BookForm({ book, action, onsubmit }) {
           className="form-control"
           value={publishDate}
           onChange={(e) => setPublishDate(e.target.value)}
+          required
         />
       </div>
 
@@ -175,6 +205,7 @@ function BookForm({ book, action, onsubmit }) {
             className="form-control"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            required
           >
             <option value="">Select Category</option>
             {categories.map((item) => (
@@ -220,6 +251,7 @@ function BookForm({ book, action, onsubmit }) {
             className="form-control"
             value={selectedAuthor}
             onChange={(e) => setSelectedAuthor(e.target.value)}
+            required
           >
             <option value="">Select Author</option>
             {authors.map((item) => (
@@ -265,6 +297,7 @@ function BookForm({ book, action, onsubmit }) {
             className="form-control"
             value={selectedPublisher}
             onChange={(e) => setSelectedPublisher(e.target.value)}
+            required
           >
             <option value="">Select Publisher</option>
             {publishers.map((item) => (
@@ -302,18 +335,20 @@ function BookForm({ book, action, onsubmit }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="book-cover-image">Cover Image</label>
+        <label htmlFor="book-image">Book Image</label>
         <input
           type="file"
-          id="book-cover-image"
-          className="form-control"
+          id="book-image"
+          name="image"
+          className="form-control-file"
+          accept="image/*"
           onChange={handleImageChange}
         />
-        <img src={imagePreview} alt="Preview" className="img-fluid mt-2" />
+        {imagePreview && <img src={imagePreview} alt="Preview" className="img-fluid mt-2" />}
       </div>
 
       <button type="submit" className="btn btn-primary">
-        {action}
+        {action === "edit" ? "Update Book" : "Add Book"}
       </button>
     </form>
   );

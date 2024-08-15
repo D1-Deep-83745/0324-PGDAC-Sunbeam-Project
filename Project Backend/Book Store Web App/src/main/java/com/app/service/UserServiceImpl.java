@@ -3,6 +3,7 @@ package com.app.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.SignInDto;
 import com.app.dto.UserDTO;
+import com.app.dto.UserProfileDTO;
+import com.app.entities.Role;
 import com.app.entities.User;
 import com.app.repository.UserRepository;
 
@@ -21,6 +24,9 @@ import com.app.repository.UserRepository;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository udao;
+    
+	@Autowired
+	private UserImageHandlingService imageService;
     
     @Autowired
     private ModelMapper map;
@@ -74,17 +80,56 @@ public class UserServiceImpl implements UserService {
 	        return map.map(user, UserDTO.class);
 	    }
 
-	@Override
-	public String updateProfile(Long id, UserDTO user, MultipartFile file) throws IOException {
-		User existingUser = udao.findById(id).orElse(null);
-		if(existingUser != null) {
-		existingUser = map.map(user, User.class);
-		existingUser.setImage(file.getBytes());
-		udao.save(existingUser);
-		return "profile updation successful";
-		}
-		return "user not found";
-	}
+	 @Override
+	 public String updateProfile(Long id, UserDTO user, MultipartFile file) throws IOException {
+		 
+	     User existingUser = udao.findById(id).orElse(null);
+	     System.out.println("Received UserDTO: " + user);
+	     if (existingUser != null) {
+	         // Update the fields from UserDTO to the existing user
+	         existingUser.setFirstName(user.getFirstName());
+	         existingUser.setLastName(user.getLastName());
+	         existingUser.setEmail(user.getEmail());
+	         existingUser.setDob(user.getDob());
+	         existingUser.setGender(user.getGender());
+	         existingUser.setPhoneNo(user.getPhoneNo());
+	       
+	         
+	         // Only update the image if a new file is provided
+	         if (file != null && !file.isEmpty()) {
+	             imageService.uploadImage(id, file);
+	         }
 
+	         udao.save(existingUser);
+	         return "Profile update successful";
+	     }
+	     return "User not found";
+	 }
 
+	  @Override
+	    public UserProfileDTO updateUserProfile(UserProfileDTO userProfileDTO, String email) {
+	        User user = udao.findByEmail(email)
+	                .orElseThrow(() -> new RuntimeException("User not found"));
+
+	        
+	        user.setFirstName(userProfileDTO.getFirstName());
+	        user.setLastName(userProfileDTO.getLastName());
+	        user.setPhoneNo(userProfileDTO.getPhoneNo());
+	        user.setDob(userProfileDTO.getDob());
+	        user.setGender(userProfileDTO.getGender());
+
+	        
+	        User updatedUser = udao.save(user);
+
+	        
+	        return map.map(updatedUser, UserProfileDTO.class);
+	    }
+	  
+	  
+	  @Override
+	    public Optional<UserProfileDTO> getUserProfile(String email) {
+	        return udao.findByEmail(email)
+	                .map(user -> map.map(user, UserProfileDTO.class));
+	    }
+	  
 }
