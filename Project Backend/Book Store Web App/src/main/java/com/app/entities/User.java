@@ -61,6 +61,10 @@ public class User extends BaseEntity {
   @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true )
   private List<Address> address=new ArrayList<Address>();
   
+  
+  @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+  private List<BookDetails> books = new ArrayList<BookDetails>();
+  
   @Lob
   private byte[] image;
 }

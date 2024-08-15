@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addBook } from "../service/books";
 import { toast } from "react-toastify";
-import BookForm from "../component/bookForm"
+import BookForm from "../component/bookForm";
 import Sidebar from "../component/sidear";
 import Header from "../component/header";
 
@@ -60,8 +60,7 @@ function AddBook() {
               <BookForm
                 action={"ADD BOOK"}
                 onsubmit={handleSubmit}
-                book={null}
-                onFileChange={handleFileChange} 
+                onFileChange={handleFileChange}
               />
             </div>
           </main>
@@ -72,3 +71,4 @@ function AddBook() {
 }
 
 export default AddBook;
+

@@ -3,7 +3,7 @@ import { addAuthor, addCategory, addPublisher, getAllAuthors, getCategories, get
 import { toast } from "react-toastify";
 
 function BookForm({ book, action, onsubmit, onFileChange }) {
-  const [imagePreview, setImagePreview] = useState(""); // Initially empty
+  const [imagePreview, setImagePreview] = useState(""); 
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
@@ -13,33 +13,30 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
   const [newCategory, setNewCategory] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newPublisher, setNewPublisher] = useState("");
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [price, setPrice] = useState("");
-  const [publishDate, setPublishDate] = useState("");
-  const [selectedAuthor, setSelectedAuthor] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedPublisher, setSelectedPublisher] = useState("");
+  const [title, setTitle] = useState(book?.title || "");
+  const [desc, setDesc] = useState(book?.description || "");
+  const [price, setPrice] = useState(book?.price || "");
+  const [publishDate, setPublishDate] = useState(book?.publishDate || "");
+  const [selectedAuthor, setSelectedAuthor] = useState(book?.authorId || "");
+  const [selectedCategory, setSelectedCategory] = useState(book?.categoryId || "");
+  const [selectedPublisher, setSelectedPublisher] = useState(book?.publisherId || "");
 
   useEffect(() => {
     loadOptions();
-  }, []);
 
-  useEffect(() => {
     if (book) {
-      setTitle(book.title || "");
-      setDesc(book.description || "");
-      setPrice(book.price || "");
-      setPublishDate(book.publishDate || "");
-      setSelectedAuthor(book.authorId || "");
-      setSelectedCategory(book.categoryId || "");
-      setSelectedPublisher(book.publisherId || "");
+      setTitle(book.title);
+      setDesc(book.description);
+      setPrice(book.price);
+      setPublishDate(book.publishDate);
+      setSelectedAuthor(book.authorId);
+      setSelectedCategory(book.categoryId);
+      setSelectedPublisher(book.publisherId);
 
-      // Check if image is a base64 string or URL
       if (book.image) {
-        setImagePreview(`data:image/jpeg;base64,${book.image}`); // Ensure proper data URI scheme
+        setImagePreview(`data:image/jpeg;base64,${book.image}`);
       } else {
-        setImagePreview(""); // Default or empty if no image
+        setImagePreview("");
       }
     }
   }, [book]);
@@ -121,27 +118,19 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", desc);
-    formData.append("price", price);
-    formData.append("publishDate", publishDate);
-    formData.append("categoryId", selectedCategory);
-    formData.append("authorId", selectedAuthor);
-    formData.append("publisherId", selectedPublisher);
-    
-    
-    if (imagePreview) {
-      const fileInput = document.getElementById('book-image');
-      if (fileInput.files[0]) {
-        formData.append("profilePicture", fileInput.files[0]);
-      }
-    }
-  
-    onsubmit(formData);
+
+    const bookData = {
+      title,
+      description: desc,
+      price,
+      publishDate,
+      categoryId: selectedCategory,
+      authorId: selectedAuthor,
+      publisherId: selectedPublisher,
+    };
+
+    onsubmit(bookData);
   };
-  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -225,14 +214,14 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
             <>
               <input
                 type="text"
-                placeholder="Enter New Category"
                 className="form-control mt-2"
+                placeholder="New Category"
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
               <button
                 type="button"
-                className="btn btn-success mt-2"
+                className="btn btn-primary mt-2"
                 onClick={handleSaveNewCategory}
               >
                 Save Category
@@ -271,14 +260,14 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
             <>
               <input
                 type="text"
-                placeholder="Enter New Author"
                 className="form-control mt-2"
+                placeholder="New Author"
                 value={newAuthor}
                 onChange={(e) => setNewAuthor(e.target.value)}
               />
               <button
                 type="button"
-                className="btn btn-success mt-2"
+                className="btn btn-primary mt-2"
                 onClick={handleSaveNewAuthor}
               >
                 Save Author
@@ -317,14 +306,14 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
             <>
               <input
                 type="text"
-                placeholder="Enter New Publisher"
                 className="form-control mt-2"
+                placeholder="New Publisher"
                 value={newPublisher}
                 onChange={(e) => setNewPublisher(e.target.value)}
               />
               <button
                 type="button"
-                className="btn btn-success mt-2"
+                className="btn btn-primary mt-2"
                 onClick={handleSaveNewPublisher}
               >
                 Save Publisher
@@ -340,15 +329,18 @@ function BookForm({ book, action, onsubmit, onFileChange }) {
           type="file"
           id="book-image"
           name="image"
-          className="form-control-file"
-          accept="image/*"
+          className="form-control"
           onChange={handleImageChange}
         />
-        {imagePreview && <img src={imagePreview} alt="Preview" className="img-fluid mt-2" />}
+        {imagePreview && (
+          <div className="mt-2">
+            <img src={imagePreview} alt="Book Preview" style={{ width: "100px", height: "auto" }} />
+          </div>
+        )}
       </div>
 
       <button type="submit" className="btn btn-primary">
-        {action === "edit" ? "Update Book" : "Add Book"}
+        {action}
       </button>
     </form>
   );
