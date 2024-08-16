@@ -179,11 +179,22 @@ public class BookServiceImpl implements BookService {
     
     @Override
     public BookDetailsDTO getBookById(Long id) throws IOException {
-        BookDetails book = bookRepo.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookDetails book = bookRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Book not found"));
+        
         BookDetailsDTO bookdto = mapper.map(book, BookDetailsDTO.class);
-        bookdto.setImage(imgHandlingService.serveImage(id)); 
+        
+        bookdto.setImage(imgHandlingService.serveImage(id));
+        bookdto.setAuthorName(Optional.ofNullable(book.getAuthor())
+            .map(Author::getAuthorName)
+            .orElse("Unknown"));
+        bookdto.setPublisherName(Optional.ofNullable(book.getPublication())
+            .map(Publisher::getPublisherName)
+            .orElse("Unknown"));
+        
         return bookdto;
     }
+
     
     @Override
     public String updateBook(Long id, BookRequestDTO bookDetails, MultipartFile file) throws IOException {

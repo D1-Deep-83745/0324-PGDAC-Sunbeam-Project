@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.app.dto.CartDTO;
 import com.app.dto.InvoiceTableData;
 import com.app.dto.OrderDto;
+import com.app.entities.BookDetails;
 import com.app.entities.BookInventory;
 import com.app.entities.ModeOfPayment;
 import com.app.entities.OrderDetails;
@@ -86,49 +87,106 @@ public class OrderServiceImpl implements OrderService {
 		    }).collect(Collectors.toList());
 	}
 
-
 	@Override
 	public String placeOrder(Long id, OrderDto order) {
-	    
-	    Transaction transaction = new Transaction();
-	    transaction.setAmount(order.getAmount());
-	    transaction.setPaymentMode(ModeOfPayment.valueOf(order.getPaymentMethod().toUpperCase()));  
-	    transaction.setStatus("PAID");
-
-	    
+	    // Fetch user by ID or throw an exception if not found
 	    User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-	    
+	    // Create and set up the transaction
+	    Transaction transaction = new Transaction();
+	    transaction.setAmount(order.getAmount());
+	    transaction.setPaymentMode(ModeOfPayment.valueOf(order.getPaymentMethod().toUpperCase()));
+	    transaction.setStatus("PAID");
+	    transaction.setUser(user); // Associate the transaction with the user
+
+	    // Create and set up the new order
 	    OrderDetails newOrder = new OrderDetails();
-	    newOrder.setTransaction(transaction);
-	    newOrder.setUser(user);
+	    newOrder.setUser(user); // Associate the order with the user
 	    newOrder.setStatus("ORDER_RECEIVED");
 
-	    
+	    // Establish bidirectional relationship between OrderDetails and Transaction
+	    transaction.setOrderDetails(newOrder); // Set the order details in the transaction
+	    newOrder.setTransaction(transaction); // Set the transaction in the order details
+
+	    // Process each item in the cart and create OrderItems
 	    List<CartDTO> items = order.getCartItems();
 	    for (CartDTO item : items) {
-	     
+	        // Fetch book details by ID or throw an exception if not found
+	        BookDetails book = bookRepo.findById(item.getId()).orElseThrow(() -> new RuntimeException("Book not found"));
+
+	        // Create and set up the order item
 	        OrderItem orderItem = new OrderItem();
-	        orderItem.setBook(bookRepo.findById(item.getId()).orElseThrow(() -> new RuntimeException("Book not found")));
+	        orderItem.setBook(book);
 	        orderItem.setPrice(item.getPrice());
 	        orderItem.setQuantity(item.getQuantity());
-	        
-	     
+	        orderItem.setOrder(newOrder); // Associate order item with the order
+
+	        // Add the order item to the order's item list
 	        newOrder.getItemList().add(orderItem);
 
-	     
-	        BookInventory inventory = inventoryRepo.findById(item.getId()).orElseThrow(() -> new RuntimeException("Inventory not found"));
+	        // Update the book inventory
+	        BookInventory inventory = inventoryRepo.findByBookId(book.getId())
+	            .orElseThrow(() -> new RuntimeException("Inventory not found"));
 	        inventory.setAvailableQuantity(inventory.getAvailableQuantity() - item.getQuantity());
 	    }
 
-	    
-	    transaction.setUser(user);
-	    transaction.setOrderDetails(newOrder);
-
-	    
+	    // Save the new order with its items and transaction
 	    orderDetailsRepo.save(newOrder);
 
 	    return "Order placed successfully";
+	}
+
+	
+
+	@Override
+	public List<OrderDto> getOrders(Long userId) {
+	    // Fetch user by ID or throw an exception if not found
+	    User user = userRepo.findById(userId)
+	        .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    // Fetch orders associated with the user
+	    List<OrderDetails> orders = orderDetailsRepo.findByUser(user);
+
+	    // Convert orders to DTOs
+	    List<OrderDto> orderDtoList = orders.stream()
+	        .map(orderDetails -> {
+	            // Initialize OrderDto
+	            OrderDto orderDto = new OrderDto();
+
+	            // Retrieve and set transaction details
+	            Transaction transaction = orderDetails.getTransaction();
+	            if (transaction != null) {
+	                orderDto.setPaymentMethod(transaction.getPaymentMode() != null ? transaction.getPaymentMode().toString() : "N/A");
+
+	                // Handle null check for Double amount
+	                Double amount = transaction.getAmount();
+	                orderDto.setAmount(amount != null ? amount : 0.0);
+	            } else {
+	                orderDto.setPaymentMethod("N/A");
+	                orderDto.setAmount(0.0);
+	            }
+
+	            // Ensure the itemList is fetched
+	            List<OrderItem> items = orderDetails.getItemList();
+	            List<CartDTO> cartItems = items != null ? items.stream()
+	                .filter(item -> item.getBook() != null) // Ensure book is not null
+	                .map(item -> {
+	                    CartDTO cartDto = new CartDTO();
+	                    cartDto.setId(item.getBook().getId());
+	                    cartDto.setTitle(item.getBook().getTitle());
+	                    cartDto.setPrice(item.getPrice());
+	                    cartDto.setQuantity(item.getQuantity());
+	                    return cartDto;
+	                })
+	                .collect(Collectors.toList()) : new ArrayList<>();
+
+	            orderDto.setCartItems(cartItems);
+
+	            return orderDto;
+	        })
+	        .collect(Collectors.toList());
+
+	    return orderDtoList;
 	}
 
 

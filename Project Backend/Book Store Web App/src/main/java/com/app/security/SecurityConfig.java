@@ -47,7 +47,7 @@ public class SecurityConfig {
 		.antMatchers("/user/signup","/user/signin",
 				"/v*/api-doc*/**","/swagger-ui/**","/books/list","/categories/listAll","/books/{id}","/reviews/book/{id}").permitAll()
 		.antMatchers(HttpMethod.OPTIONS).permitAll()
-		.antMatchers("/address/user/{id}","/orders/placeOrder/{id}","/user/profile").hasRole("CUSTOMER")
+		.antMatchers("/address/user/{id}","/orders/placeOrder/{id}","/user/profile","/orders/orderDetails/{id}","/reviews/add").hasRole("CUSTOMER")
 		.antMatchers("/orders/**","/books/**","/categories/**","/user/count","/reviews/count","/author/add","/publisher/add",
 				"user/getAll","/user/{id}","/reviews/getReviews").hasAnyRole("ADMIN" ,"SALES")
 		.antMatchers("/user/RegisterSalesPerson").hasRole("ADMIN")

@@ -10,9 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.dto.AddReviewDto;
 import com.app.dto.ReviewDto;
 import com.app.service.ReviewService;
 
@@ -38,7 +41,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/book/{bookId}")
-	public ResponseEntity<List<ReviewDto>> getReviewsByBookId(@PathVariable Long bookId) {
+	public ResponseEntity<?> getReviewsByBookId(@PathVariable Long bookId) {
 	    try {
 	        List<ReviewDto> reviews = reviewService.getReviewsByBookId(bookId);
 
@@ -55,7 +58,12 @@ public class ReviewController {
 	        // Return an internal server error response
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
-
+	    
 }
+	  
+	   @PostMapping("/add")
+	   public ResponseEntity<?> addReview(@RequestBody AddReviewDto review){
+		   return ResponseEntity.status(HttpStatus.OK).body(reviewService.addReview(review));
+	   }
 	
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
@@ -92,31 +92,32 @@ const BookListing = () => {
         </div>
       </div>
 
+      <Container>
       <Row className="mb-3">
-        {sortedBooks.length > 0 ? (
-          sortedBooks.map((book) => (
-            <Col key={book.id} xs={6} sm={4} md={4} lg={2} className="mb-3">
-              <Card onClick={() => handleBookClick(book.id)} style={{ cursor: 'pointer' }}>
-                <Card.Img
-                  variant="top"
-                  src={`data:image/jpeg;base64,${book.image}`}
-                  alt={book.title}
-                />
-                <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
-                  <Card.Text>₹{book.price}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))
-        ) : (
-          <p>No books available in this category.</p>
-        )}
-      </Row>
+      {sortedBooks.length > 0 ? (
+        sortedBooks.map((book) => (
+          <Col key={book.id} xs={6} sm={4} md={4} lg={2} className="mb-5">
+          <Card onClick={() => handleBookClick(book.id)} className="book-card">
+            <Card.Img 
+              variant="top" 
+              className="book-card-img"
+              src={`data:image/jpeg;base64,${book.image}`}
+              alt={book.title}
+            />
+            <Card.Body className="book-card-body">
+              <Card.Title className="book-title">{book.title}</Card.Title>
+              <Card.Text className="card-text">₹{book.price}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>      
+        ))
+      ) : (
+        <p>No books available in this category.</p>
+      )}
+    </Row>
+    </Container>
     </div>
   );
 };
 
 export default BookListing;
-
-

@@ -37,4 +37,9 @@ public class OrderController {
     public ResponseEntity<?> placeOrder(@PathVariable Long id , @RequestBody OrderDto order){
     	return ResponseEntity.status(HttpStatus.OK).body(orderService.placeOrder(id, order));
     }
+    
+    @GetMapping("/orderDetails/{id}")
+    public ResponseEntity<?> getOrders(@PathVariable Long id){
+    	return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrders(id));
+    }
 }

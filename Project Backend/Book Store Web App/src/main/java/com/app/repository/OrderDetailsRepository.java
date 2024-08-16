@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.app.dto.BookSalesDTO;
 import com.app.dto.DayWiseSalesDTO;
 import com.app.entities.OrderDetails;
+import com.app.entities.User;
 
 public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long> {
 	  
@@ -30,4 +31,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long
 		List<OrderDetails> findTop7ByOrderByCreatedOnDesc();
 		
 		List<OrderDetails> findAllByOrderByCreatedOnDesc();
+		
+		 List<OrderDetails> findByUser(User user);
 }

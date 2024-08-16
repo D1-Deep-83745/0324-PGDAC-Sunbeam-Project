@@ -9,4 +9,5 @@ public interface OrderService {
      List<InvoiceTableData> getLatestInvoices();
      List<InvoiceTableData> getAllInvoices();
      String placeOrder(Long id , OrderDto order);
+     List<OrderDto> getOrders(Long id);
 }

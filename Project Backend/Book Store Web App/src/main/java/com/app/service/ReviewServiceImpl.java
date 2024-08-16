@@ -9,8 +9,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.dto.AddReviewDto;
 import com.app.dto.ReviewDto;
+import com.app.entities.OrderItem;
 import com.app.entities.Review;
+import com.app.repository.OrderItemRepository;
 import com.app.repository.ReviewRepository;
 
 
@@ -22,6 +25,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Autowired
     private ReviewRepository reviewRepo;
 	
+	
+	@Autowired
+	private OrderItemRepository orderItemRepo;
 	
 	@Override
 	public int totalReviews() {
@@ -72,5 +78,24 @@ public class ReviewServiceImpl implements ReviewService {
 	        dto.setComment(review.getComment());  
 	        return dto;
 	    }
+
+
+	@Override
+	public String addReview(AddReviewDto review) {
+		Review reviewInfo = new Review();
+		
+		OrderItem item = orderItemRepo.findById(review.getItemId()).orElse(null);
+		
+		reviewInfo.setBook(item.getBook());
+		reviewInfo.setComment(review.getComment());
+		reviewInfo.setRating(review.getRating());
+		reviewInfo.setUser(item.getOrder().getUser());
+		
+		reviewRepo.save(reviewInfo);
+		return "Review submited Successfully";
+	}
+	  
+	  
+	  
 
 }

@@ -1,7 +1,42 @@
 .nav-item {
-    color: black;
-    font-weight: bold;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    text-decoration: none;
-  }
-  
+  color: black;
+  font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-decoration: none;
+}
+.book-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+  background-color: #fff;
+  padding: 0; /* Remove padding to ensure image fills the container */
+  box-shadow: none; /* Remove box shadow if not needed */
+  border: none; /* Remove border */
+}
+
+.book-card-img {
+  height: 300px; /* Adjust height as needed */
+  width: 100%; /* Ensure image covers full width */
+  object-fit: cover; /* Cover the container while maintaining aspect ratio */
+}
+
+.book-card-body {
+  text-align: center;
+  padding: 1rem; /* Add padding as needed */
+}
+
+.book-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  white-space: nowrap; /* Prevents wrapping to a new line */
+  overflow: hidden; /* Hides overflow text */
+  text-overflow: ellipsis; /* Adds ellipsis (...) for overflow text */
+}
+
+.card-text {
+  font-size: 1.4rem;
+  color: #000000;
+}
+

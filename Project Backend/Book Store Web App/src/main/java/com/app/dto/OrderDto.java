@@ -1,5 +1,6 @@
 package com.app.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class OrderDto {
     
-	private List<CartDTO> cartItems;
+	private List<CartDTO> cartItems = new ArrayList<CartDTO>();
 	private String paymentMethod;
 	private double amount;
 }
